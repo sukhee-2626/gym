@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Leaderboard{% endblock %}
+
+{% block content %}
+<!-- Leaderboard Header -->
+<header class="mb-10 mt-4">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+            <h1 class="font-headline text-4xl font-bold tracking-tight text-on-surface">Global <span class="bg-clip-text text-transparent bg-gradient-to-r from-[#bb00fc] to-[#00eefc]">Rankings</span></h1>
+            <p class="text-[#a9abb3] mt-2">Earn points through daily workouts and attendance to climb the ladder.</p>
+        </div>
+    </div>
+</header>
+
+<div class="glass-panel rounded-[2.5rem] p-8" style="background: rgba(34, 38, 47, 0.4);">
+    <div class="flex justify-between items-center mb-8">
+        <h3 class="text-xl font-bold font-headline tracking-tight">Top Athletes</h3>
+        <div class="flex items-center gap-2 text-secondary text-sm font-bold">
+            <span class="w-2 h-2 bg-secondary rounded-full animate-pulse"></span>
+            LIVE
+        </div>
+    </div>
+
+    <!-- Leaderboard Table -->
+    <div class="rounded-3xl border border-white/5 overflow-hidden">
+        <table class="w-full text-left">
+            <thead class="bg-white/5 border-b border-white/10">
+                <tr>
+                    <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-[#a9abb3] w-16 text-center">Rank</th>
+                    <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-[#a9abb3]">Athlete</th>
+                    <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-[#a9abb3] text-center">Streak</th>
+                    <th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-[#a9abb3] text-right">Points</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-white/5">
+                {% for entry in leaderboard %}
+                <tr class="hover:bg-white/5 transition-colors {% if entry.user.id == current_user.id %}bg-primary/10 border-l-4 border-primary{% endif %} group cursor-default">
+                    <td class="px-6 py-5 text-center font-bold font-headline text-lg {% if loop.index == 1 %}text-[#00eefc]{% elif loop.index == 2 %}text-[#bb00fc]{% else %}text-white{% endif %}">
+                        {% if loop.index == 1 %}
+                        <span class="material-symbols-outlined emoji">emoji_events</span>
+                        {% else %}
+                        #{{ loop.index }}
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-surface-container-high to-surface-variant flex items-center justify-center font-bold border border-white/10 text-white">
+                                {{ entry.user.name[0].upper() }}
+                            </div>
+                            <div>
+                                <p class="font-bold text-sm">{{ entry.user.name }} {% if entry.user.id == current_user.id %}(You){% endif %}</p>
+                                <p class="text-xs text-[#a9abb3] capitalize">{{ entry.user.fitness_level }}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-5 text-center">
+                        <span class="inline-flex items-center gap-1 text-sm font-bold text-secondary">
+                            <span class="material-symbols-outlined text-[16px]">local_fire_department</span> {{ entry.workout_streak }}
+                        </span>
+                    </td>
+                    <td class="px-6 py-5 text-right">
+                        <span class="text-xl font-bold font-headline text-primary">{{ entry.total_points }}</span>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" class="px-6 py-8 text-center text-sm text-[#a9abb3]">No rankings available yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

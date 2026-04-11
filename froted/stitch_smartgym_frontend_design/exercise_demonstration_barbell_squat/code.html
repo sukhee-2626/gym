@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Manrope:wght@200;300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#ecedf6",
+                        "error-container": "#a70138",
+                        "on-surface-variant": "#a9abb3",
+                        "surface": "#0b0e14",
+                        "surface-variant": "#22262f",
+                        "on-primary-fixed-variant": "#4b0068",
+                        "background": "#0b0e14",
+                        "tertiary": "#ac89ff",
+                        "surface-container-lowest": "#000000",
+                        "secondary-fixed": "#00eefc",
+                        "on-tertiary-container": "#f8f1ff",
+                        "surface-container": "#161a21",
+                        "on-tertiary": "#290067",
+                        "tertiary-fixed": "#bda1ff",
+                        "secondary-fixed-dim": "#00deec",
+                        "on-primary-container": "#3d0055",
+                        "primary-fixed-dim": "#d061ff",
+                        "outline-variant": "#45484f",
+                        "on-primary": "#4f006d",
+                        "tertiary-fixed-dim": "#b190ff",
+                        "error": "#ff6e84",
+                        "on-secondary": "#005359",
+                        "on-primary-fixed": "#000000",
+                        "secondary-container": "#006970",
+                        "tertiary-dim": "#874cff",
+                        "surface-container-highest": "#22262f",
+                        "surface-bright": "#282c36",
+                        "on-error": "#490013",
+                        "primary-fixed": "#d878ff",
+                        "on-background": "#ecedf6",
+                        "secondary-dim": "#00deec",
+                        "on-secondary-container": "#e3fdff",
+                        "surface-container-high": "#1c2028",
+                        "on-tertiary-fixed": "#1f0052",
+                        "on-tertiary-fixed-variant": "#4700a7",
+                        "tertiary-container": "#7000ff",
+                        "on-secondary-fixed": "#003f43",
+                        "inverse-surface": "#f9f9ff",
+                        "on-secondary-fixed-variant": "#005e64",
+                        "primary-dim": "#bb00fc",
+                        "primary": "#df8eff",
+                        "surface-tint": "#df8eff",
+                        "outline": "#73757d",
+                        "error-dim": "#d73357",
+                        "surface-dim": "#0b0e14",
+                        "surface-container-low": "#10131a",
+                        "inverse-on-surface": "#52555c",
+                        "secondary": "#00eefc",
+                        "inverse-primary": "#9a00d0",
+                        "primary-container": "#d878ff",
+                        "on-error-container": "#ffb2b9"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .neon-glow-primary {
+            box-shadow: 0 0 20px rgba(187, 0, 252, 0.3);
+        }
+        .neon-glow-secondary {
+            box-shadow: 0 0 20px rgba(0, 238, 252, 0.3);
+        }
+        .glass-panel {
+            backdrop-filter: blur(20px);
+            background: rgba(34, 38, 47, 0.4);
+            border-top: 0.5px solid rgba(69, 72, 79, 0.15);
+        }
+        body {
+            background-color: #0b0e14;
+            color: #ecedf6;
+            font-family: 'Manrope', sans-serif;
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-dim selection:text-white">
+<!-- TopNavBar Cluster -->
+<header class="bg-slate-950/40 backdrop-blur-xl border-b border-white/10 shadow-[0_0_30px_rgba(187,0,252,0.1)] fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4">
+<div class="flex items-center gap-8">
+<h1 class="text-2xl font-black italic tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-cyan-400 font-['Space_Grotesk']">SYNTHETIC PULSE</h1>
+<nav class="hidden md:flex space-x-8 font-['Space_Grotesk'] font-bold text-lg">
+<a class="text-slate-400 hover:bg-white/5 transition-all duration-300 px-3 py-1 rounded-lg" href="#">Overview</a>
+<a class="text-fuchsia-400 font-bold hover:bg-white/5 transition-all duration-300 px-3 py-1 rounded-lg" href="#">Training</a>
+<a class="text-slate-400 hover:bg-white/5 transition-all duration-300 px-3 py-1 rounded-lg" href="#">Analytics</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden md:flex bg-surface-container-highest rounded-full px-4 py-2 items-center gap-2 border border-outline-variant/15">
+<span class="material-symbols-outlined text-on-surface-variant">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-48 text-on-surface" placeholder="Search exercises..." type="text"/>
+</div>
+<div class="flex gap-2">
+<button class="p-2 text-slate-400 hover:bg-white/5 rounded-full transition-all active:scale-95"><span class="material-symbols-outlined">notifications</span></button>
+<button class="p-2 text-slate-400 hover:bg-white/5 rounded-full transition-all active:scale-95"><span class="material-symbols-outlined">settings</span></button>
+<div class="w-10 h-10 rounded-full border-2 border-primary-dim overflow-hidden ml-2 shadow-[0_0_10px_rgba(187,0,252,0.5)]">
+<img alt="User profile" data-alt="Close up portrait of a fit athletic man in gym attire with confident expression, dramatic gym lighting with blue and purple highlights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB91YEuoX33ACeYzED5Jw7znBgWsTvpQMqeag7nNy_eKDplhFH1yXxvEtJuLQ3yY1Y7RsulgHdCWbREemsJoUm5759j5N0HMMs27U-8DRrVAfNuGrVFW09iyvD5qMWWu8MFrDAvivFnbb9vWM5jHodkxks_FTrRMpoauGEjoZPF9KSB1WiXd_F3u-RjzEnfQtcuEicyrpc_qOJaaXkID9hy0wasNVjAfGmLibMxXypzOx3lKUgRC_nxxqHoQ2YMdfZLZX-GS9HxkluX"/>
+</div>
+</div>
+</div>
+</header>
+<div class="flex pt-24 pb-12 px-6 min-h-screen">
+<!-- SideNavBar Cluster -->
+<aside class="hidden lg:flex flex-col p-6 space-y-8 bg-slate-950/60 backdrop-blur-2xl fixed left-4 top-24 bottom-4 w-64 rounded-3xl shadow-[20px_0_40px_rgba(0,0,0,0.4)] z-40 border border-white/5">
+<div class="flex items-center space-x-3 px-2">
+<div class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_10px_#00eefc] animate-pulse"></div>
+<div>
+<p class="text-xs font-['Manrope'] font-medium tracking-wide text-cyan-400">KINETIC AI</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-widest">Live Tracking Active</p>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center space-x-4 p-3 rounded-xl text-slate-500 hover:text-slate-300 hover:bg-white/10 transition-colors" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-['Manrope'] font-medium">Dashboard</span>
+</a>
+<a class="relative flex items-center space-x-4 p-3 rounded-xl text-cyan-400 before:absolute before:-left-4 before:w-1 before:h-8 before:bg-cyan-400 before:rounded-r-full before:shadow-[0_0_15px_#00eefc] bg-white/5" href="#">
+<span class="material-symbols-outlined">fitness_center</span>
+<span class="font-['Manrope'] font-medium">Workouts</span>
+</a>
+<a class="flex items-center space-x-4 p-3 rounded-xl text-slate-500 hover:text-slate-300 hover:bg-white/10 transition-colors" href="#">
+<span class="material-symbols-outlined">play_circle</span>
+<span class="font-['Manrope'] font-medium">Exercises</span>
+</a>
+<a class="flex items-center space-x-4 p-3 rounded-xl text-slate-500 hover:text-slate-300 hover:bg-white/10 transition-colors" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="font-['Manrope'] font-medium">Nutrition</span>
+</a>
+<a class="flex items-center space-x-4 p-3 rounded-xl text-slate-500 hover:text-slate-300 hover:bg-white/10 transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-['Manrope'] font-medium">Community</span>
+</a>
+</nav>
+<div class="mt-auto space-y-6">
+<button class="w-full py-4 rounded-2xl bg-gradient-to-r from-primary-dim to-tertiary-dim text-white font-bold text-xs tracking-tighter shadow-lg shadow-primary-dim/20 active:scale-95 transition-all">
+                    UPGRADE TO PRO
+                </button>
+<div class="space-y-1">
+<a class="flex items-center space-x-4 p-2 text-slate-500 hover:text-slate-300 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm">help</span>
+<span class="text-sm">Help</span>
+</a>
+<a class="flex items-center space-x-4 p-2 text-slate-500 hover:text-slate-300 transition-colors" href="#">
+<span class="material-symbols-outlined text-sm text-error">logout</span>
+<span class="text-sm">Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="lg:ml-72 flex-1 max-w-7xl mx-auto space-y-8">
+<!-- Hero Video Section -->
+<section class="relative group">
+<div class="relative w-full aspect-video rounded-[2.5rem] overflow-hidden border-2 border-primary/20 shadow-2xl transition-all duration-700 group-hover:border-secondary/40">
+<img alt="Barbell Squat Demo" class="w-full h-full object-cover brightness-75 scale-105 group-hover:scale-100 transition-transform duration-[2s]" data-alt="Cinematic shot of a professional athlete performing a heavy barbell squat in a dark industrial gym, moody blue and magenta neon lights illuminating the scene" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAFufjjH5q3m_naa72UrmJJEW57bJas5neRQSMtAdn9WPH7r7CsiBmAhWle06WOKJhh6xHoeDKROHVnKLVUORMwlXRPcTwwbS-yRwcZ9cW0lhTzOwarAT_NCuALCG7X_tX6ptFh2KtGj4xM0fi7ZrZzoaBZSgCYJChO9q6fW7SgFZF6XKFZi5tIeqwQ_TNJt8cK77956F769Fp9jpoPfUAugFwalb_DzsbtQxahrTClhlAIIn5ujve6mM7ce1PcPrLyOmqovU3lhgAO"/>
+<!-- Overlay Controls -->
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-12">
+<div class="flex items-end justify-between">
+<div>
+<span class="bg-primary/20 text-primary px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase border border-primary/30 mb-4 inline-block">Pro Series</span>
+<h2 class="text-5xl md:text-7xl font-black font-['Space_Grotesk'] tracking-tighter text-white uppercase italic">Master the Squat</h2>
+</div>
+<div class="flex gap-4 items-center">
+<button class="w-16 h-16 rounded-full glass-panel flex items-center justify-center border border-white/20 hover:bg-secondary/20 hover:border-secondary transition-all group/btn active:scale-90">
+<span class="material-symbols-outlined text-3xl group-hover/btn:text-secondary" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<button class="w-12 h-12 rounded-full glass-panel flex items-center justify-center border border-white/20 hover:bg-white/10 transition-all active:scale-90">
+<span class="material-symbols-outlined">fullscreen</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Dynamic Glows -->
+<div class="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-4/5 bg-primary/10 blur-[120px] rounded-full"></div>
+</section>
+<!-- Grid Layout for Details -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left Column: Instructions -->
+<div class="lg:col-span-2 space-y-8">
+<div class="glass-panel rounded-[2rem] p-8 space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="text-2xl font-bold font-['Space_Grotesk'] flex items-center gap-3">
+<span class="w-1.5 h-8 bg-secondary rounded-full"></span>
+                                Technical Execution
+                            </h3>
+<span class="text-xs font-mono text-on-surface-variant bg-white/5 px-4 py-1.5 rounded-full border border-outline-variant/10">3 Step Sequence</span>
+</div>
+<div class="space-y-6">
+<!-- Step 1 -->
+<div class="flex gap-6 group">
+<div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-surface-container-highest flex items-center justify-center text-secondary font-black font-['Space_Grotesk'] text-xl border border-outline-variant/20 group-hover:border-secondary transition-colors">01</div>
+<div class="space-y-2">
+<h4 class="text-lg font-bold text-white uppercase tracking-tight">The Setup</h4>
+<p class="text-on-surface-variant leading-relaxed">Position the barbell across your upper traps. Stand with feet shoulder-width apart, toes slightly out. Brace your core as if preparing for impact.</p>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="flex gap-6 group">
+<div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-surface-container-highest flex items-center justify-center text-secondary font-black font-['Space_Grotesk'] text-xl border border-outline-variant/20 group-hover:border-secondary transition-colors">02</div>
+<div class="space-y-2">
+<h4 class="text-lg font-bold text-white uppercase tracking-tight">The Descent</h4>
+<p class="text-on-surface-variant leading-relaxed">Hinge at the hips and bend knees simultaneously. Keep chest proud and back neutral. Lower until thighs are parallel to the floor or slightly below.</p>
+</div>
+</div>
+<!-- Step 3 -->
+<div class="flex gap-6 group">
+<div class="flex-shrink-0 w-12 h-12 rounded-2xl bg-surface-container-highest flex items-center justify-center text-secondary font-black font-['Space_Grotesk'] text-xl border border-outline-variant/20 group-hover:border-secondary transition-colors">03</div>
+<div class="space-y-2">
+<h4 class="text-lg font-bold text-white uppercase tracking-tight">The Drive</h4>
+<p class="text-on-surface-variant leading-relaxed">Drive through the mid-foot, extending hips and knees simultaneously. Exhale at the top and maintain core tension throughout the ascent.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Watch Out Section -->
+<div class="bg-error-container/10 border border-error/20 rounded-[2rem] p-8 overflow-hidden relative">
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-error/10 blur-[50px] rounded-full"></div>
+<h3 class="text-2xl font-bold font-['Space_Grotesk'] text-error flex items-center gap-3 mb-6">
+<span class="material-symbols-outlined">warning</span>
+                            Critical Alerts
+                        </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="glass-panel bg-white/5 p-5 rounded-2xl border border-error/10">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-error text-sm">dangerous</span>
+<h4 class="font-bold text-white uppercase text-xs tracking-widest">Knees Caving In</h4>
+</div>
+<p class="text-sm text-on-surface-variant leading-snug">Avoid 'valgus' collapse. Actively push knees outward to track over your toes to prevent ACL strain.</p>
+</div>
+<div class="glass-panel bg-white/5 p-5 rounded-2xl border border-error/10">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-error text-sm">dangerous</span>
+<h4 class="font-bold text-white uppercase text-xs tracking-widest">Rounding the Back</h4>
+</div>
+<p class="text-sm text-on-surface-variant leading-snug">Loss of spinal neutrality places extreme load on the lumbar discs. Keep your gaze forward and lats engaged.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Quick Stats -->
+<aside class="space-y-8">
+<div class="glass-panel rounded-[2rem] p-8 space-y-8 sticky top-28">
+<div>
+<h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-4">Target Muscles</h4>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="text-sm font-medium">Quads</span>
+<div class="w-32 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[90%] shadow-[0_0_8px_#00eefc]"></div>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-sm font-medium">Glutes</span>
+<div class="w-32 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[75%] shadow-[0_0_8px_#00eefc]"></div>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-sm font-medium">Core</span>
+<div class="w-32 h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[50%] shadow-[0_0_8px_#bb00fc]"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="h-px bg-outline-variant/10"></div>
+<div class="flex items-center justify-between">
+<div>
+<h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em] mb-1">Difficulty</h4>
+<p class="text-xl font-bold font-['Space_Grotesk'] text-tertiary">Intermediate</p>
+</div>
+<span class="material-symbols-outlined text-4xl text-tertiary">stairs</span>
+</div>
+<div class="space-y-4">
+<h4 class="text-xs font-black text-on-surface-variant uppercase tracking-[0.2em]">Equipment Needed</h4>
+<div class="flex flex-wrap gap-2">
+<span class="bg-surface-container-highest text-[10px] font-bold px-3 py-1.5 rounded-lg border border-outline-variant/20 uppercase tracking-widest">Olympic Bar</span>
+<span class="bg-surface-container-highest text-[10px] font-bold px-3 py-1.5 rounded-lg border border-outline-variant/20 uppercase tracking-widest">Squat Rack</span>
+<span class="bg-surface-container-highest text-[10px] font-bold px-3 py-1.5 rounded-lg border border-outline-variant/20 uppercase tracking-widest">Weight Plates</span>
+</div>
+</div>
+<button class="w-full py-4 rounded-2xl bg-secondary/10 border border-secondary/30 text-secondary font-black text-sm tracking-widest hover:bg-secondary/20 transition-all active:scale-95">
+                            ADD TO WORKOUT
+                        </button>
+</div>
+<!-- Side Micro-Card -->
+<div class="glass-panel rounded-[2rem] p-6 border-l-4 border-primary">
+<div class="flex gap-4">
+<div class="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-primary">lightbulb</span>
+</div>
+<div>
+<h5 class="font-bold text-white text-sm mb-1">Trainer's Tip</h5>
+<p class="text-xs text-on-surface-variant leading-relaxed">Inhale deeply and 'pack' your air into your abdomen (Valsalva maneuver) before you begin the descent.</p>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+</div>
+<!-- Mobile Bottom Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 glass-panel border-t border-white/5 px-6 py-4 flex justify-between items-center z-50">
+<button class="text-secondary"><span class="material-symbols-outlined">grid_view</span></button>
+<button class="text-on-surface-variant"><span class="material-symbols-outlined">fitness_center</span></button>
+<button class="w-12 h-12 rounded-full bg-gradient-to-tr from-primary-dim to-secondary flex items-center justify-center -mt-10 shadow-lg shadow-primary/40"><span class="material-symbols-outlined text-white">add</span></button>
+<button class="text-on-surface-variant"><span class="material-symbols-outlined">restaurant</span></button>
+<button class="text-on-surface-variant"><span class="material-symbols-outlined">person</span></button>
+</nav>
+<!-- Background Orbs -->
+<div class="fixed top-0 left-0 w-full h-full -z-50 pointer-events-none opacity-40">
+<div class="absolute top-1/4 -left-20 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[150px]"></div>
+<div class="absolute bottom-0 -right-20 w-[500px] h-[500px] bg-secondary/10 rounded-full blur-[150px]"></div>
+</div>
+</body></html>

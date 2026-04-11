@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Attendance & Check-in{% endblock %}
+
+{% block content %}
+<header class="mb-10 mt-4">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+            <h1 class="font-headline text-4xl font-bold tracking-tight text-on-surface">Gym <span class="text-[#bb00fc]">Check-in</span></h1>
+            <p class="text-[#a9abb3] mt-2">Scan your QR code at the reception to log your attendance.</p>
+        </div>
+    </div>
+</header>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div class="glass-panel p-8 rounded-[2.5rem] flex flex-col items-center justify-center text-center" style="background: rgba(34, 38, 47, 0.4);">
+        <div class="w-64 h-64 bg-white p-4 rounded-3xl shadow-[0_0_40px_rgba(187,0,252,0.3)] mb-8 flex items-center justify-center">
+            <img src="data:image/png;base64,{{ qr_b64 }}" alt="QR Code" class="max-w-full max-h-full">
+        </div>
+        
+        <h2 class="text-2xl font-bold font-headline mb-2">Member Scancode</h2>
+        <p class="text-xs text-[#a9abb3] mb-8 font-mono">ID: {{ current_user.id }}-{{ current_user.email[:5] }}</p>
+
+        {% if today_attendance %}
+            <div class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-secondary/20 text-secondary border border-secondary/30">
+                <span class="material-symbols-outlined font-bold">check_circle</span>
+                <span class="text-sm font-bold tracking-widest uppercase">Checked In at {{ today_attendance.check_in.strftime('%H:%M') }}</span>
+            </div>
+            
+            {% if not today_attendance.check_out %}
+                <form action="{{ url_for('attendance.checkout') }}" method="POST" class="mt-6 w-full max-w-xs">
+                    <button type="submit" class="w-full py-4 rounded-2xl bg-gradient-to-r from-[#d73357] to-[#490013] text-white font-bold shadow-xl">
+                        Check Out Now
+                    </button>
+                </form>
+            {% else %}
+                <p class="mt-4 text-[#a9abb3] text-sm">Checked out at {{ today_attendance.check_out.strftime('%H:%M') }}</p>
+            {% endif %}
+        {% else %}
+            <!-- Demo manual checkin button -->
+            <form action="{{ url_for('attendance.scan_qr', token='demo_token') }}" method="GET" class="mt-4 w-full max-w-xs">
+                <button type="submit" class="w-full py-4 rounded-2xl bg-gradient-to-r from-[#bb00fc] to-[#00eefc] text-black font-bold shadow-xl">
+                    Manual Check In (Demo)
+                </button>
+            </form>
+        {% endif %}
+    </div>
+
+    <div class="glass-panel p-8 rounded-[2.5rem]" style="background: rgba(34, 38, 47, 0.4);">
+        <h3 class="text-xl font-bold font-headline mb-6">Recent Check-ins</h3>
+        <div class="space-y-4">
+            {% for log in history %}
+            <div class="p-4 rounded-2xl bg-white/5 border border-white/5 flex justify-between items-center">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-[#1c2028] flex items-center justify-center text-primary border border-primary/20">
+                        <span class="material-symbols-outlined">event_available</span>
+                    </div>
+                    <div>
+                        <p class="font-bold text-sm">{{ log.check_in.strftime('%b %d, %Y') }}</p>
+                        <p class="text-xs text-[#a9abb3]">{{ log.check_in.strftime('%H:%M') }} {% if log.check_out %}- {{ log.check_out.strftime('%H:%M') }}{% endif %}</p>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <p class="text-sm text-[#a9abb3]">No past check-ins found.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

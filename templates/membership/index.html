@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Membership{% endblock %}
+
+{% block content %}
+<!-- Hero Section: Active Membership -->
+<section class="relative mb-12 mt-4">
+  <div class="absolute -top-24 -right-12 w-96 h-96 bg-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
+  <div class="glass-panel rounded-[2.5rem] p-8 md:p-12 overflow-hidden flex flex-col md:flex-row gap-12 items-center relative" style="background: rgba(34, 38, 47, 0.4);">
+    <div class="flex-1 z-10 text-center md:text-left">
+      {% if membership %}
+      <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-secondary-container/30 border border-secondary/20 text-secondary-fixed mb-6">
+          <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
+          <span class="text-xs font-bold tracking-widest uppercase">Active Membership</span>
+      </div>
+      <h1 class="font-headline text-5xl md:text-7xl font-bold tracking-tighter text-on-surface mb-4">
+          {{ membership.plan.name }} <span class="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Status</span>
+      </h1>
+      <p class="text-[#a9abb3] text-lg max-w-xl font-body mb-8">
+          Experience the peak of performance. Your access to premium equipment, AI-driven personal training, and the recovery lounge remains active.
+      </p>
+      {% else %}
+      <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-error-container/30 border border-error/20 text-error mb-6">
+          <span class="w-2 h-2 rounded-full bg-error"></span>
+          <span class="text-xs font-bold tracking-widest uppercase">Inactive</span>
+      </div>
+      <h1 class="font-headline text-5xl md:text-7xl font-bold tracking-tighter text-on-surface mb-4">
+          Choose a <span class="bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Plan</span>
+      </h1>
+      <p class="text-[#a9abb3] text-lg max-w-xl font-body mb-8">
+          Upgrade your experience to unlock elite-tier benefits and achieve your {{ current_user.goal | replace('_',' ') }} safely.
+      </p>
+      {% endif %}
+    </div>
+
+    {% if membership %}
+    <div class="w-full md:w-80 glass-panel bg-[#22262f]/80 rounded-3xl p-8 border border-white/5 shadow-2xl relative z-10">
+      <div class="flex flex-col items-center">
+          <div class="relative w-40 h-40 mb-6">
+              <svg class="w-full h-full transform -rotate-90">
+                  <circle class="text-white/5" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-width="8"></circle>
+                  <circle class="text-secondary drop-shadow-[0_0_8px_rgba(0,238,252,0.5)]" cx="80" cy="80" fill="transparent" r="70" stroke="currentColor" stroke-dasharray="440" stroke-dashoffset="{{ 440 * (1 - (membership.days_remaining / 30)) }}" stroke-width="8"></circle>
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center">
+                  <span class="text-4xl font-headline font-bold text-on-surface">{{ membership.days_remaining }}</span>
+                  <span class="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">Days Left</span>
+              </div>
+          </div>
+          <div class="text-center">
+              <p class="text-[#a9abb3] text-sm mb-1">Renews on</p>
+              <p class="text-on-surface font-headline font-bold">{{ membership.end_date.strftime('%B %d, %Y') }}</p>
+              <p class="text-secondary text-xl font-headline font-bold mt-2">₹{{ membership.plan.price_monthly }}/mo</p>
+          </div>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Plan Comparison Grid -->
+<section class="mb-20">
+  <div class="flex flex-col md:flex-row justify-between items-end gap-6 mb-12">
+    <div>
+        <h2 class="font-headline text-3xl font-bold text-on-surface mb-2">Choose Your Velocity</h2>
+        <p class="text-[#a9abb3]">Upgrade your experience to unlock elite-tier benefits.</p>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for plan in plans %}
+    <!-- Plan Card -->
+    <div class="glass-panel flex flex-col p-8 rounded-[2rem] border transition-all duration-300 relative group overflow-hidden {% if membership and membership.plan.id == plan.id %}bg-[#22262f]/80 border-secondary{% else %}bg-[#10131a]/40 border-white/5 hover:bg-[#10131a]/60{% endif %}">
+      
+      {% if membership and membership.plan.id == plan.id %}
+      <div class="absolute -inset-0.5 bg-gradient-to-b from-primary to-secondary rounded-[2rem] opacity-30 blur-sm -z-10"></div>
+      <div class="absolute top-0 right-8 transform translate-y-4">
+          <div class="px-4 py-1.5 bg-secondary text-black text-[10px] font-black uppercase tracking-widest rounded-full shadow-xl shadow-secondary/20">Current</div>
+      </div>
+      {% endif %}
+
+      <div class="mb-8 z-10">
+          <h3 class="text-2xl font-headline font-bold text-on-surface mb-2">{{ plan.name }}</h3>
+          <div class="flex items-baseline gap-1">
+              <span class="text-4xl font-headline font-bold text-on-surface">₹{{ plan.price_monthly }}</span>
+              <span class="text-[#a9abb3] text-sm">/month</span>
+          </div>
+      </div>
+      
+      <ul class="space-y-4 mb-10 flex-1 z-10">
+          {% for feature in plan.features.split(',') %}
+          <li class="flex items-center gap-3 text-on-surface">
+              <span class="material-symbols-outlined text-secondary text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+              <span>{{ feature.strip() }}</span>
+          </li>
+          {% endfor %}
+      </ul>
+
+      <div class="z-10">
+      {% if membership and membership.plan.id == plan.id %}
+        <button class="w-full py-4 rounded-2xl bg-white text-black font-bold shadow-lg shadow-white/10 cursor-default">Current Plan</button>
+      {% else %}
+        <form action="{{ url_for('membership.enroll', plan_id=plan.id) }}" method="POST">
+             <button type="submit" class="w-full py-4 rounded-2xl bg-gradient-to-r from-primary-dim to-tertiary-dim text-black font-bold shadow-xl shadow-primary/10 hover:scale-[1.02] transition-transform">{% if membership %}Switch Plan{% else %}Select Plan{% endif %}</button>
+        </form>
+      {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,209 @@
+{% extends "base.html" %}
+{% block title %}Diet Planner{% endblock %}
+
+{% block content %}
+<!-- Header & Top Macro Bar -->
+<header class="mb-10 mt-4">
+  <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+    <div>
+        <h1 class="font-headline text-4xl font-bold tracking-tight text-on-surface">Diet Engine <span class="text-secondary">v2.4</span></h1>
+        <p class="text-[#a9abb3] mt-2">Personalized AI nutrition plan optimized for your {{ current_user.goal | replace('_', ' ') }} goal.</p>
+    </div>
+    <div class="glass-panel p-6 rounded-3xl flex items-center gap-8 min-w-[320px]" style="background: rgba(34, 38, 47, 0.4);">
+      <div class="flex flex-col gap-1">
+          <span class="text-xs uppercase tracking-widest text-[#a9abb3]">Daily Cost</span>
+          <div class="flex items-baseline gap-2">
+              <span class="text-2xl font-bold text-secondary font-headline">₹{{ plan.budget.spent if plan.budget else 0 }}</span>
+              <span class="text-[#a9abb3]">/ ₹{{ plan.budget.target if plan.budget else 500 }}</span>
+          </div>
+      </div>
+      <div class="h-12 w-px bg-white/10"></div>
+      <div class="flex-1">
+          <div class="flex justify-between items-center mb-2">
+              <span class="text-xs uppercase tracking-widest text-[#a9abb3]">Budget Health</span>
+              {% set pcost = (plan.budget.spent / plan.budget.target * 100)|int if plan.budget else 0 %}
+              <span class="text-xs font-bold text-secondary">{{ [pcost, 100]|min }}%</span>
+          </div>
+          <div class="w-full h-1.5 bg-[#10131a] rounded-full overflow-hidden">
+              <div class="h-full bg-secondary shadow-[0_0_10px_rgba(0,238,252,0.5)]" style="width: {{ [pcost, 100]|min }}%"></div>
+          </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Macro Summary Section (Bento Style) -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
+  <!-- Main Calories Ring -->
+  <div class="md:col-span-1 glass-panel p-6 rounded-3xl flex flex-col items-center justify-center relative overflow-hidden group" style="background: rgba(34, 38, 47, 0.4);">
+    <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+    <div class="relative w-32 h-32 flex items-center justify-center">
+      {% set tcpct = [(total_cals / (plan.macros.calories|int) * 100)|int, 100]|min if plan.macros and plan.macros.calories else 0 %}
+      <svg class="w-full h-full transform -rotate-90">
+          <circle class="text-white/5" cx="64" cy="64" fill="transparent" r="56" stroke="currentColor" stroke-width="8"></circle>
+          <circle class="text-[#bb00fc] drop-shadow-[0_0_8px_rgba(187,0,252,0.6)]" cx="64" cy="64" fill="transparent" r="56" stroke="currentColor" 
+                  stroke-dasharray="351.8" stroke-dashoffset="{{ 351.8 * (1 - tcpct/100) }}" stroke-width="8" style="transition: stroke-dashoffset 1s ease-out;"></circle>
+      </svg>
+      <div class="absolute flex flex-col items-center">
+          <span class="text-2xl font-bold font-headline">{{ total_cals }}</span>
+          <span class="text-[10px] text-[#a9abb3] uppercase tracking-tighter">/ {% if plan.macros %}{{ plan.macros.calories }}{% endif %}</span>
+      </div>
+    </div>
+    <h3 class="mt-4 font-headline font-bold text-on-surface">Total Calories</h3>
+  </div>
+  
+  <!-- Macro Bars -->
+  <div class="md:col-span-3 glass-panel p-8 rounded-3xl flex flex-col justify-between gap-6" style="background: rgba(34, 38, 47, 0.4);">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Protein -->
+      <div class="space-y-3">
+          <div class="flex justify-between items-end">
+              <span class="text-on-surface font-bold">Protein</span>
+              <span class="text-[#a9abb3] text-sm">{{ total_protein }}g / <span class="text-on-surface">{% if plan.macros %}{{ plan.macros.protein }}{% endif %}</span></span>
+          </div>
+          <div class="w-full h-2 bg-[#10131a] rounded-full">
+              {% set pp = [(total_protein / (plan.macros.protein|replace('g','')|int) * 100)|int, 100]|min if plan.macros else 0 %}
+              <div class="h-full bg-[#d878ff] rounded-full shadow-[0_0_8px_rgba(216,120,255,0.4)]" style="width: {{ pp }}%"></div>
+          </div>
+          <p class="text-[10px] text-[#a9abb3]">Essential for muscle repair.</p>
+      </div>
+      <!-- Carbs -->
+      <div class="space-y-3">
+          <div class="flex justify-between items-end">
+              <span class="text-on-surface font-bold">Carbs</span>
+              <span class="text-[#a9abb3] text-sm">-- / <span class="text-on-surface">{% if plan.macros %}{{ plan.macros.carbs }}{% endif %}</span></span>
+          </div>
+          <div class="w-full h-2 bg-[#10131a] rounded-full">
+              <div class="h-full bg-[#00deec] rounded-full shadow-[0_0_8px_rgba(0,222,236,0.4)]" style="width: 10%"></div>
+          </div>
+          <p class="text-[10px] text-[#a9abb3]">Primary energy source.</p>
+      </div>
+      <!-- Fats -->
+      <div class="space-y-3">
+          <div class="flex justify-between items-end">
+              <span class="text-on-surface font-bold">Fats</span>
+              <span class="text-[#a9abb3] text-sm">-- / <span class="text-on-surface">{% if plan.macros %}{{ plan.macros.fats }}{% endif %}</span></span>
+          </div>
+          <div class="w-full h-2 bg-[#10131a] rounded-full">
+              <div class="h-full bg-[#b190ff] rounded-full shadow-[0_0_8px_rgba(177,144,255,0.4)]" style="width: 10%"></div>
+          </div>
+          <p class="text-[10px] text-[#a9abb3]">Hormonal balance.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Main Section: Suggested Meals -->
+<section class="space-y-8 mb-12">
+  <div class="flex items-center justify-between">
+    <h2 class="font-headline text-2xl font-bold flex items-center gap-3">
+        <span class="material-symbols-outlined text-primary">auto_awesome</span>
+        AI Recommended Plan
+    </h2>
+    <div class="flex gap-2">
+        <button onclick="document.getElementById('log-food-modal').classList.remove('hidden')" class="px-6 py-2 rounded-full bg-gradient-to-r from-primary-dim to-tertiary-dim text-white text-sm font-bold shadow-lg shadow-primary/20 hover:scale-105 active:scale-95 transition-all">Log Food Focus</button>
+    </div>
+  </div>
+
+  <!-- Meal Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    {% set meal_images = [
+       "https://lh3.googleusercontent.com/aida-public/AB6AXuA-KFwCo-D9BricuK0whHJ39tPRWxNQU0pJJvxEq-gvRqleLEYDClsXUhnMZZOG3dJNhSGKE_tKYOmdKx1R8v6aXeChW4dV4pE5uSNvPiOOSR3WeY5ZlJO9vMZZXNx0OfzcMUFFd0AvCG-qG-YKOBLyKNX5bb5tBK0jfJ_pymzwjT1lqFZYpzBZdwXLeI1LXdrTYtCpuV06VXRcrCETCscSDPXpkOctejtvsuzglwz5fhrOlsNoO2fNlGKmDX9yaHzVu4xivqerTaCd",
+       "https://lh3.googleusercontent.com/aida-public/AB6AXuCb48gRzr2ZIgJ2ijUcc7rsy3aD4M3QskSZUXHvOf88cR47Ozy0kKO38eds41sC2XYXtBSF5s2hVSWQ30BhsM6KFFpzrD2QNr5a_YFNie75c7wvdqxv7hy7Dw24MpnJnqFg6Rffyw3JTKldU4d8VGUo2RQFD0oa2-czX9shkcDBrehTxZPOCqqpDPay3MnWDnwGi3s02bX8zhU7febQTEAN7WNfuvT54hRjTBtzAXNXtI8lNs8egV9uFfFtL5OZpZhkYUNVHAKQ8HLY",
+       "https://lh3.googleusercontent.com/aida-public/AB6AXuB8YeP6cMXvJP985OLD0GvQwulzRx3K7JSA1uxS6T0uboMb1_5Iy3GlRWmR0H4guqXNIwaWwp2xDvswGlQ_KfgQzS18GuwErGEPS9qXSziJoUv6CZBRtA7CoeNiUJmn52oIu4WMFBCp0KPvfnWuHd2B6zoGD4McwPXzKaoPPrAY5GSQbcZLxSns1xgMefO5WDUSw7svtsCFIe1u_4XRulJu-HEVvUbtaiijNYtx0o0RjGfyurC9X5BHwJ_pX60AMWYloFXtpFrhvkhT",
+       "https://lh3.googleusercontent.com/aida-public/AB6AXuAqRP5r057FtrJufJ62FjLwujggpM5Wl0rR6IEfsCxZ6LMu_IBaLnKulL7UOY3AUhg1pakhrFs9QUZMy8aIbtmdHEWLzZ2UEFKV3Jt0QtM1GBH7aCO1Or28nnQceVdfcswmYVPzabP5ChsGrD7T1_XRLq_Ljb35_j_Ne5eBFK4INSuy1fG1MjsHgChxCg8DGpTJklXHiWN9G4ByqYVB08196paCK3AJ6UaV1dTcA-6m1iZnibBhuxuGJ31PHM6z0s6cfR3Bn5sW2GZc"
+    ] %}
+    {% for meal in plan.meals %}
+    <!-- Meal Card -->
+    <div class="glass-panel rounded-[2rem] p-4 flex flex-col sm:flex-row gap-6 hover:shadow-[0_0_20px_rgba(187,0,252,0.1)] transition-all group" style="background: rgba(34, 38, 47, 0.4);">
+      <div class="sm:w-48 h-48 rounded-2xl overflow-hidden shrink-0">
+          <img alt="{{ meal.name }}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" src="{{ meal_images[loop.index0 % meal_images|length] }}"/>
+      </div>
+      <div class="flex-1 py-2 flex flex-col">
+          <div class="flex justify-between items-start mb-2">
+              <div>
+                  <span class="text-xs font-bold {% if loop.index0 % 2 == 0 %}text-primary{% else %}text-secondary{% endif %} uppercase tracking-widest">{{ meal.type }}</span>
+                  <h3 class="text-xl font-bold mt-1 text-on-surface leading-tight">{{ meal.name }}</h3>
+              </div>
+          </div>
+          <div class="flex gap-4 mb-4">
+              <div class="flex items-center gap-1 text-[#a9abb3] text-xs font-bold bg-[#1c2028] px-2 py-1 rounded">
+                  <span class="material-symbols-outlined text-[16px] text-primary">local_fire_department</span>
+                  {{ meal.calories }} kcal
+              </div>
+              <div class="flex items-center gap-1 text-[#a9abb3] text-xs font-bold bg-[#1c2028] px-2 py-1 rounded">
+                  <span class="material-symbols-outlined text-[16px] text-[#ac89ff]">egg_alt</span>
+                  {{ meal.protein }} protein
+              </div>
+          </div>
+          <div class="mt-auto">
+              <span class="text-xs text-[#a9abb3] font-bold block mb-2 mt-4 uppercase">Key Items</span>
+              <div class="flex flex-wrap gap-2 text-sm text-[#a9abb3]">
+                  {{ meal.description }}
+              </div>
+          </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Log Food Modal Structure -->
+<div id="log-food-modal" class="hidden fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#0b0e14]/80 backdrop-blur-md">
+    <div class="relative glass-panel w-full max-w-xl rounded-[2.5rem] p-8 shadow-2xl border border-white/10" style="background: rgba(34, 38, 47, 0.8);">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-headline font-bold">Log Activity</h2>
+            <button onclick="document.getElementById('log-food-modal').classList.add('hidden')" class="text-[#a9abb3] hover:text-white transition">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        
+        <form action="{{ url_for('diet.log_food') }}" method="POST">
+            <div class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold uppercase tracking-widest text-[#a9abb3] mb-2 block">Food Item</label>
+                    <select name="food_id" class="w-full bg-[#10131a] border border-white/10 rounded-2xl p-4 text-white focus:ring-2 focus:ring-primary outline-none">
+                        {% for c, d in food_db.items() %}
+                        <optgroup label="{{ c|capitalize }}">
+                            {% for id, details in d.items() %}
+                            <option value="{{ id }}">{{ details.name }} ({{ details.cals }} kcal)</option>
+                            {% endfor %}
+                        </optgroup>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                   <label class="text-xs font-bold uppercase tracking-widest text-[#a9abb3] mb-2 block">Quantity (Grams/ml)</label>
+                   <input type="number" name="quantity" required min="1" value="100" class="w-full bg-[#10131a] border border-white/10 rounded-2xl p-4 text-white transform focus:ring-2 focus:ring-primary outline-none text-center text-xl font-bold font-headline">
+                </div>
+                <div class="pt-4">
+                    <button type="submit" class="w-full py-4 bg-gradient-to-r from-primary-dim to-tertiary-dim rounded-2xl text-white font-bold tracking-widest uppercase hover:opacity-90 font-headline">ADD TO LOG</button>
+                </div>
+            </div>
+        </form>
+        
+        <!-- Recents inside modal visually -->
+        <div class="mt-8 space-y-4">
+            <p class="text-[10px] uppercase tracking-widest text-[#a9abb3]">Recent entries today</p>
+            <div class="max-h-40 overflow-y-auto pr-2 space-y-2">
+            {% for entry in today_entries %}
+            <div class="flex items-center justify-between p-3 bg-white/5 rounded-xl">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+                        <span class="material-symbols-outlined text-sm">restaurant</span>
+                    </div>
+                    <div>
+                        <p class="font-bold text-sm leading-tight">{{ entry.food_name }} ({{ entry.quantity }}{{ entry.unit }})</p>
+                        <p class="text-[10px] text-[#a9abb3]">{{ entry.calories }} kcal</p>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <p class="text-xs text-[#a9abb3]">No food logged today.</p>
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

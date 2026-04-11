@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Profile Settings{% endblock %}
+
+{% block content %}
+<!-- Profile Header -->
+<section class="relative glass-panel rounded-[2.5rem] p-8 md:p-12 overflow-hidden mb-8 mt-4" style="background: rgba(34, 38, 47, 0.4);">
+  <div class="absolute top-0 right-0 w-64 h-64 bg-[#bb00fc]/10 blur-[100px] rounded-full"></div>
+  <div class="relative z-10 flex flex-col md:flex-row items-center gap-8">
+      <div class="relative group">
+          <div class="absolute inset-0 bg-gradient-to-br from-[#bb00fc] to-[#00eefc] rounded-[2rem] blur opacity-40 group-hover:opacity-70 transition-opacity"></div>
+          <div class="relative w-32 h-32 md:w-40 md:h-40 rounded-[2rem] overflow-hidden border-2 border-white/10 bg-[#0b0e14] flex items-center justify-center font-bold text-6xl text-primary">
+              {{ current_user.name[0].upper() }}
+          </div>
+      </div>
+      <div class="flex-1 text-center md:text-left">
+          <h1 class="font-headline text-4xl md:text-5xl font-black mb-4 tracking-tighter text-on-surface">{{ current_user.name }}</h1>
+          <div class="flex flex-wrap justify-center md:justify-start gap-3">
+              <span class="px-4 py-1.5 rounded-full bg-[#d878ff]/20 text-[#d061ff] text-xs font-bold tracking-widest border border-[#bb00fc]/30 uppercase">
+                  GOAL: {{ current_user.goal | replace('_',' ') }}
+              </span>
+              <span class="px-4 py-1.5 rounded-full bg-[#006970]/20 text-[#00eefc] text-xs font-bold tracking-widest border border-secondary/30 uppercase">
+                  LEVEL: {{ current_user.fitness_level }}
+              </span>
+              <span class="px-4 py-1.5 rounded-full bg-white/5 text-[#a9abb3] text-xs font-bold tracking-widest border border-white/10 flex items-center gap-2">
+                  <span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span> LIVE PROFILE
+              </span>
+          </div>
+      </div>
+  </div>
+</section>
+
+<div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+  <!-- Personal Details -->
+  <section class="glass-panel rounded-[2rem] p-8" style="background: rgba(34, 38, 47, 0.4);">
+      <div class="flex items-center gap-3 mb-8">
+          <span class="material-symbols-outlined text-[#bb00fc]">contact_page</span>
+          <h2 class="font-headline text-xl font-bold tracking-tight">Personal Details</h2>
+      </div>
+      <form action="{{ url_for('auth.profile') }}" method="POST" class="space-y-6">
+          <div class="group relative">
+              <label class="block text-[10px] uppercase tracking-[0.2em] text-[#a9abb3] font-bold mb-2 ml-1">Full Name</label>
+              <input name="name" class="w-full bg-[#000] border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#bb00fc]/50 outline-none transition-all font-medium" type="text" value="{{ current_user.name }}" required/>
+          </div>
+          <div class="group relative">
+              <label class="block text-[10px] uppercase tracking-[0.2em] text-[#a9abb3] font-bold mb-2 ml-1">Email Address</label>
+              <input name="email" class="w-full bg-[#000] border border-white/10 rounded-2xl px-6 py-4 text-white hover:cursor-not-allowed opacity-70 outline-none font-medium" type="email" value="{{ current_user.email }}" readonly/>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="group relative">
+                  <label class="block text-[10px] uppercase tracking-[0.2em] text-[#a9abb3] font-bold mb-2 ml-1">Fitness Goal</label>
+                  <select name="goal" class="w-full bg-[#000] border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#bb00fc]/50 outline-none font-medium appearance-none">
+                      <option value="weight_loss" {% if current_user.goal == 'weight_loss' %}selected{% endif %}>Weight Loss</option>
+                      <option value="muscle_gain" {% if current_user.goal == 'muscle_gain' %}selected{% endif %}>Muscle Gain</option>
+                      <option value="endurance" {% if current_user.goal == 'endurance' %}selected{% endif %}>Endurance</option>
+                      <option value="maintenance" {% if current_user.goal == 'maintenance' %}selected{% endif %}>Maintenance</option>
+                  </select>
+              </div>
+              <div class="group relative">
+                  <label class="block text-[10px] uppercase tracking-[0.2em] text-[#a9abb3] font-bold mb-2 ml-1">Current Weight (kg)</label>
+                  <input name="weight_kg" class="w-full bg-[#000] border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#bb00fc]/50 outline-none font-medium" type="number" step="0.1" value="{{ current_user.weight_kg }}" required/>
+              </div>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="group relative">
+                  <label class="block text-[10px] uppercase tracking-[0.2em] text-[#a9abb3] font-bold mb-2 ml-1">Height (cm)</label>
+                  <input name="height_cm" class="w-full bg-[#000] border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#bb00fc]/50 outline-none font-medium" type="number" step="0.1" value="{{ current_user.height_cm }}" required/>
+              </div>
+              <div class="group relative">
+                  <label class="block text-[10px] uppercase tracking-[0.2em] text-[#a9abb3] font-bold mb-2 ml-1">Fitness Level</label>
+                  <select name="fitness_level" class="w-full bg-[#000] border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#bb00fc]/50 outline-none font-medium appearance-none">
+                      <option value="beginner" {% if current_user.fitness_level == 'beginner' %}selected{% endif %}>Beginner</option>
+                      <option value="intermediate" {% if current_user.fitness_level == 'intermediate' %}selected{% endif %}>Intermediate</option>
+                      <option value="advanced" {% if current_user.fitness_level == 'advanced' %}selected{% endif %}>Advanced</option>
+                  </select>
+              </div>
+          </div>
+          <button type="submit" class="w-full py-4 rounded-2xl bg-gradient-to-r from-[#bb00fc] to-[#874cff] text-black font-black text-sm tracking-widest hover:brightness-110 active:scale-[0.98] transition-all shadow-[0_10px_30px_rgba(187,0,252,0.2)] mt-4">
+              SAVE CHANGES
+          </button>
+      </form>
+  </section>
+
+  <div class="space-y-8">
+      <!-- Account Management -->
+      <section class="glass-panel rounded-[2rem] p-8 border-b-4 border-[#d73357]/20" style="background: rgba(34, 38, 47, 0.4);">
+          <div class="flex items-center gap-3 mb-8">
+              <span class="material-symbols-outlined text-[#ac89ff]">settings</span>
+              <h2 class="font-headline text-xl font-bold tracking-tight">Account Management</h2>
+          </div>
+          <div class="grid grid-cols-1 gap-4">
+              <a href="{{ url_for('membership.index') }}" class="w-full flex items-center justify-between px-6 py-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all text-sm font-bold">
+                  <span class="flex items-center gap-3"><span class="material-symbols-outlined text-[#a9abb3]">card_membership</span> Manage Membership</span>
+                  <span class="material-symbols-outlined text-[#a9abb3]">chevron_right</span>
+              </a>
+              <a href="{{ url_for('auth.logout') }}" class="w-full flex items-center justify-between px-6 py-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 transition-all text-sm font-bold">
+                  <span class="flex items-center gap-3"><span class="material-symbols-outlined text-[#a9abb3]">logout</span> Sign Out</span>
+                  <span class="material-symbols-outlined text-[#a9abb3]">chevron_right</span>
+              </a>
+          </div>
+      </section>
+  </div>
+</div>
+{% endblock %}

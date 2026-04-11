@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SmartGym - Settings</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#7000ff",
+                        "on-tertiary": "#290067",
+                        "outline": "#73757d",
+                        "secondary": "#00eefc",
+                        "surface-tint": "#df8eff",
+                        "tertiary-dim": "#874cff",
+                        "on-surface": "#ecedf6",
+                        "surface-dim": "#0b0e14",
+                        "background": "#0b0e14",
+                        "primary-container": "#d878ff",
+                        "on-secondary-fixed-variant": "#005e64",
+                        "on-error-container": "#ffb2b9",
+                        "secondary-container": "#006970",
+                        "on-primary-container": "#3d0055",
+                        "on-tertiary-fixed": "#1f0052",
+                        "surface-container-high": "#1c2028",
+                        "surface-variant": "#22262f",
+                        "primary-fixed-dim": "#d061ff",
+                        "on-secondary": "#005359",
+                        "on-error": "#490013",
+                        "on-tertiary-fixed-variant": "#4700a7",
+                        "error-dim": "#d73357",
+                        "error-container": "#a70138",
+                        "secondary-fixed-dim": "#00deec",
+                        "primary-dim": "#bb00fc",
+                        "inverse-primary": "#9a00d0",
+                        "secondary-dim": "#00deec",
+                        "on-surface-variant": "#a9abb3",
+                        "on-secondary-container": "#e3fdff",
+                        "tertiary": "#ac89ff",
+                        "surface-bright": "#282c36",
+                        "on-tertiary-container": "#f8f1ff",
+                        "on-primary-fixed": "#000000",
+                        "on-background": "#ecedf6",
+                        "inverse-surface": "#f9f9ff",
+                        "surface-container-low": "#10131a",
+                        "tertiary-fixed": "#bda1ff",
+                        "surface-container-highest": "#22262f",
+                        "surface-container": "#161a21",
+                        "error": "#ff6e84",
+                        "outline-variant": "#45484f",
+                        "surface": "#0b0e14",
+                        "on-secondary-fixed": "#003f43",
+                        "tertiary-fixed-dim": "#b190ff",
+                        "on-primary": "#4f006d",
+                        "surface-container-lowest": "#000000",
+                        "on-primary-fixed-variant": "#4b0068",
+                        "primary-fixed": "#d878ff",
+                        "secondary-fixed": "#00eefc",
+                        "primary": "#df8eff",
+                        "inverse-on-surface": "#52555c"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Space Grotesk"],
+                        "body": ["Manrope"],
+                        "label": ["Manrope"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(34, 38, 47, 0.4);
+            backdrop-filter: blur(16px);
+            border-top: 0.5px solid rgba(69, 72, 79, 0.3);
+        }
+        .neon-gradient-text {
+            background: linear-gradient(to right, #bb00fc, #00eefc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .neon-glow-btn {
+            background: linear-gradient(135deg, #bb00fc 0%, #874cff 50%, #00eefc 100%);
+            box-shadow: 0 0 20px rgba(187, 0, 252, 0.3);
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .neon-glow-btn:hover {
+            box-shadow: 0 0 32px rgba(0, 238, 252, 0.4);
+            transform: scale(1.02);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary/30 min-h-screen">
+<!-- Sidebar Navigation (Desktop) -->
+<nav class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-full p-6 bg-slate-900/40 backdrop-blur-xl border-r border-white/10 z-50">
+<div class="mb-10">
+<h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-fuchsia-600 to-cyan-400 font-headline tracking-tight">SmartGym</h1>
+<p class="text-[10px] uppercase tracking-[0.2em] text-on-surface-variant font-bold mt-1">Elite Performance</p>
+</div>
+<div class="space-y-2 flex-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white transition-colors hover:bg-white/10" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-headline font-bold">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white transition-colors hover:bg-white/10" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="font-headline font-bold">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white transition-colors hover:bg-white/10" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-headline font-bold">Members</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white transition-colors hover:bg-white/10" href="#">
+<span class="material-symbols-outlined">fitness_center</span>
+<span class="font-headline font-bold">Workouts</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-cyan-400 border-l-4 border-cyan-400 bg-white/5 font-headline font-bold" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</div>
+<button class="mt-auto neon-glow-btn text-white py-4 rounded-2xl font-headline font-bold flex items-center justify-center gap-2 group">
+<span class="material-symbols-outlined">add_circle</span>
+            New Workout
+        </button>
+</nav>
+<!-- Top Navigation -->
+<header class="flex justify-between items-center w-full px-6 py-4 fixed top-0 z-40 bg-slate-950/20 backdrop-blur-md md:pl-72">
+<div class="md:hidden">
+<h1 class="text-xl font-bold text-fuchsia-600 font-headline">SmartGym</h1>
+</div>
+<div class="hidden md:flex gap-8 items-center">
+<a class="text-slate-300 hover:text-fuchsia-300 transition-all font-medium" href="#">Live Pulse</a>
+<a class="text-slate-300 hover:text-fuchsia-300 transition-all font-medium" href="#">Community</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary/20 p-0.5">
+<img alt="User Profile" class="w-full h-full object-cover rounded-full" data-alt="Close up portrait of a fit woman with athletic gear in a modern dark studio setting with neon highlights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuSU7bitvdtfA5rsFM_tAod_5jnmrxThD3L_o21dfRG-KpoI3lE9TS75VBGWAv2f89ONCPWtR8lQ7B0_QhTqT3xbV9T6jVWS9nE8XGzi-SsaGDLbqXixDDc7e0w5vlpz75IquVUaCrxfHv2iTjv4EaTxrGumQ9PrApum-cqHo92rz7eHXWXdFlu5rEb8qsS7NM5oTJphQdvpkicph_iiEhMejs6ibj8JCWspBxAasg48bt5tolWpE72eTRHpiJIndSgIbnY7t95aZM"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-32 px-6 md:pl-72 md:pr-12 max-w-7xl mx-auto">
+<!-- Background Orbs -->
+<div class="fixed top-[-10%] right-[-10%] w-[500px] h-[500px] bg-primary/10 rounded-full blur-[120px] -z-10 animate-pulse"></div>
+<div class="fixed bottom-[-5%] left-[20%] w-[400px] h-[400px] bg-secondary/5 rounded-full blur-[100px] -z-10"></div>
+<header class="mb-12">
+<h2 class="text-4xl md:text-5xl font-black font-headline tracking-tighter mb-2">User <span class="neon-gradient-text">Settings</span></h2>
+<p class="text-on-surface-variant font-medium">Fine-tune your kinetic performance profile and app experience.</p>
+</header>
+<form class="space-y-8">
+<!-- Account Details Section -->
+<section class="glass-card rounded-[2rem] p-8 md:p-10 shadow-xl border border-white/5 relative overflow-hidden">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-3xl">manage_accounts</span>
+</div>
+<div>
+<h3 class="text-2xl font-bold font-headline">Account Details</h3>
+<p class="text-sm text-on-surface-variant">Update your identification and contact info</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="space-y-2 group">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant ml-1">Full Name</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border-0 border-b-2 border-outline-variant focus:border-secondary transition-all px-4 py-4 rounded-t-xl text-on-surface placeholder:text-outline focus:ring-0" type="text" value="Alex Rivera"/>
+<div class="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-primary to-secondary group-focus-within:w-full transition-all duration-500"></div>
+</div>
+</div>
+<div class="space-y-2 group">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant ml-1">Email Address</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border-0 border-b-2 border-outline-variant focus:border-secondary transition-all px-4 py-4 rounded-t-xl text-on-surface placeholder:text-outline focus:ring-0" type="email" value="alex.rivera@kinetic.io"/>
+<div class="absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-primary to-secondary group-focus-within:w-full transition-all duration-500"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Personal Stats Section (Bento Style) -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div class="lg:col-span-2 glass-card rounded-[2rem] p-8 md:p-10 shadow-xl border border-white/5">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-3xl">straighten</span>
+</div>
+<div>
+<h3 class="text-2xl font-bold font-headline">Biometrics</h3>
+<p class="text-sm text-on-surface-variant">Essential metrics for AI workout scaling</p>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+<div class="space-y-2 group">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant ml-1">Height (cm)</label>
+<input class="w-full bg-surface-container-lowest border-0 border-b-2 border-outline-variant focus:border-secondary transition-all px-4 py-4 rounded-t-xl text-on-surface focus:ring-0" type="number" value="182"/>
+</div>
+<div class="space-y-2 group">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant ml-1">Weight (kg)</label>
+<input class="w-full bg-surface-container-lowest border-0 border-b-2 border-outline-variant focus:border-secondary transition-all px-4 py-4 rounded-t-xl text-on-surface focus:ring-0" type="number" value="78.5"/>
+</div>
+<div class="space-y-2 group">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant ml-1">Age</label>
+<input class="w-full bg-surface-container-lowest border-0 border-b-2 border-outline-variant focus:border-secondary transition-all px-4 py-4 rounded-t-xl text-on-surface focus:ring-0" type="number" value="28"/>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-[2rem] p-8 shadow-xl border border-white/5 bg-gradient-to-br from-primary/10 to-transparent flex flex-col justify-center">
+<div class="text-center">
+<span class="material-symbols-outlined text-5xl text-primary mb-4" style="font-variation-settings: 'FILL' 1;">pulse_alert</span>
+<h4 class="text-xl font-headline font-bold mb-2">Health Sync</h4>
+<p class="text-sm text-on-surface-variant mb-6">Your biometrics are encrypted and synced with Apple Health &amp; Google Fit.</p>
+<button class="text-xs font-bold uppercase tracking-widest text-secondary hover:text-white transition-colors border border-secondary/30 px-6 py-2 rounded-full" type="button">Manage Sync</button>
+</div>
+</div>
+</section>
+<!-- App Preferences Section -->
+<section class="glass-card rounded-[2rem] p-8 md:p-10 shadow-xl border border-white/5">
+<div class="flex items-center gap-4 mb-8">
+<div class="w-12 h-12 rounded-2xl bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-3xl">tune</span>
+</div>
+<div>
+<h3 class="text-2xl font-bold font-headline">App Preferences</h3>
+<p class="text-sm text-on-surface-variant">Customize your interaction interface</p>
+</div>
+</div>
+<div class="space-y-8">
+<!-- Notification Toggle -->
+<div class="flex items-center justify-between p-4 rounded-2xl bg-surface-container-low/50 border border-white/5">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">notifications_active</span>
+<div>
+<p class="font-bold font-headline">Push Notifications</p>
+<p class="text-xs text-on-surface-variant">Get alerts for workout reminders and milestones</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Measurement Dropdown -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-2xl bg-surface-container-low/50 border border-white/5">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-on-surface-variant">square_foot</span>
+<div>
+<p class="font-bold font-headline">Units of Measurement</p>
+<p class="text-xs text-on-surface-variant">Global standard for all numeric displays</p>
+</div>
+</div>
+<select class="bg-surface-container-lowest border-0 border-b-2 border-outline-variant focus:border-secondary rounded-lg px-8 py-2 text-on-surface focus:ring-0 min-w-[160px]">
+<option value="metric">Metric (kg, cm)</option>
+<option value="imperial">Imperial (lb, ft)</option>
+</select>
+</div>
+</div>
+</section>
+<!-- Action Buttons -->
+<div class="flex flex-col sm:flex-row items-center justify-end gap-6 pt-6">
+<button class="text-on-surface-variant hover:text-white transition-colors font-bold uppercase tracking-widest text-xs" type="button">Discard Changes</button>
+<button class="neon-glow-btn text-white px-12 py-5 rounded-full font-headline font-black text-lg tracking-tight w-full sm:w-auto" type="submit">
+                    Save Changes
+                </button>
+</div>
+</form>
+</main>
+<!-- Bottom Navigation (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-6 pb-8 md:hidden bg-slate-900/60 backdrop-blur-2xl border-t border-white/5 rounded-t-[2.5rem] shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+<a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-['Manrope'] text-[10px] uppercase tracking-widest mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-['Manrope'] text-[10px] uppercase tracking-widest mt-1">Stats</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2" href="#">
+<span class="material-symbols-outlined">event_note</span>
+<span class="font-['Manrope'] text-[10px] uppercase tracking-widest mt-1">Plan</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-gradient-to-b from-fuchsia-500/20 to-cyan-500/20 text-white rounded-2xl px-4 py-2 ring-1 ring-white/20" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-['Manrope'] text-[10px] uppercase tracking-widest mt-1">Profile</span>
+</a>
+</nav>
+</body></html>

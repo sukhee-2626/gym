@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}AI Coach Chat{% endblock %}
+
+{% block extra_css %}
+<style>
+.chat-window::-webkit-scrollbar { width: 6px; }
+.chat-window::-webkit-scrollbar-track { background: transparent; }
+.chat-window::-webkit-scrollbar-thumb { background: #22262f; border-radius: 10px; }
+</style>
+{% endblock %}
+
+{% block content %}
+<header class="mb-6 mt-4">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+            <h1 class="font-headline text-4xl font-bold tracking-tight text-on-surface">Pulse <span class="text-[#00eefc]">Coach</span></h1>
+            <p class="text-[#a9abb3] mt-2">Ask anything about your form, diet, or recovery.</p>
+        </div>
+    </div>
+</header>
+
+<div class="glass-panel rounded-[2.5rem] flex flex-col overflow-hidden h-[60vh] border border-white/5 relative shadow-2xl" style="background: rgba(34, 38, 47, 0.4);">
+    <div class="absolute inset-0 bg-gradient-to-b from-[#00eefc]/5 to-transparent pointer-events-none"></div>
+    
+    <div id="chat-box" class="flex-1 overflow-y-auto p-6 space-y-6 chat-window z-10">
+        <!-- Initial Message -->
+        <div class="flex gap-4">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#bb00fc] to-[#00eefc] flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-black">smart_toy</span>
+            </div>
+            <div class="glass-panel p-4 rounded-2xl rounded-tl-none text-sm text-white max-w-[80%]" style="background: rgba(28, 32, 40, 0.6);">
+                Hey {{ current_user.name.split()[0] }}! I'm your SmartGym AI coach. Need help with the {{ current_user.goal | replace('_',' ') }} plan or got a fitness question?
+            </div>
+        </div>
+    </div>
+
+    <div class="p-4 border-t border-white/10 bg-[#0b0e14]/50 backdrop-blur-md z-10">
+        <form id="chat-form" class="relative group flex items-center gap-4">
+            <input type="text" id="user-input" class="w-full bg-[#1c2028] border border-white/5 rounded-full py-4 pl-6 pr-14 text-white focus:ring-2 focus:ring-[#00eefc]/50 outline-none transition-all placeholder-[#a9abb3]" placeholder="Ask your AI coach...">
+            <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#00eefc] text-black flex items-center justify-center hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined">send</span>
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const chatForm = document.getElementById('chat-form');
+const chatBox = document.getElementById('chat-box');
+const inputField = document.getElementById('user-input');
+
+function appendMessage(text, isUser) {
+    const msgDiv = document.createElement('div');
+    msgDiv.className = `flex gap-4 ${isUser ? 'flex-row-reverse' : ''}`;
+    
+    const iconDiv = document.createElement('div');
+    iconDiv.className = `w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${isUser ? 'bg-white/10' : 'bg-gradient-to-br from-[#bb00fc] to-[#00eefc]'}`;
+    iconDiv.innerHTML = `<span class="material-symbols-outlined ${isUser ? 'text-white' : 'text-black'}">${isUser ? 'person' : 'smart_toy'}</span>`;
+    
+    const bubbleDiv = document.createElement('div');
+    bubbleDiv.className = `glass-panel p-4 rounded-2xl text-sm text-white max-w-[80%] ${isUser ? 'rounded-tr-none bg-primary/20 border-primary/30' : 'rounded-tl-none bg-[#1c2028]/80'}`;
+    bubbleDiv.textContent = text;
+    
+    msgDiv.appendChild(iconDiv);
+    msgDiv.appendChild(bubbleDiv);
+    chatBox.appendChild(msgDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+chatForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const text = inputField.value.trim();
+    if (!text) return;
+    
+    appendMessage(text, true);
+    inputField.value = '';
+    
+    // Add loading
+    const loadingId = 'loading-' + Date.now();
+    const loadingDiv = document.createElement('div');
+    loadingDiv.id = loadingId;
+    loadingDiv.className = 'flex gap-4';
+    loadingDiv.innerHTML = `
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#bb00fc] to-[#00eefc] flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-black animate-spin">sync</span>
+        </div>
+        <div class="glass-panel p-4 rounded-2xl rounded-tl-none text-sm text-[#a9abb3] bg-[#1c2028]/80 animate-pulse">
+            Thinking...
+        </div>
+    `;
+    chatBox.appendChild(loadingDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+    
+    try {
+        const res = await fetch("{{ url_for('chatbot.ask') }}", {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ message: text })
+        });
+        const data = await res.json();
+        document.getElementById(loadingId).remove();
+        appendMessage(data.response, false);
+    } catch(e) {
+        document.getElementById(loadingId).remove();
+        appendMessage("Network error. Try again.", false);
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}SmartGym{% endblock %} | The Synthetic Pulse</title>
+  
+  <!-- Tailwind via CDN for quick prototype styling -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&amp;family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+  
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-lowest": "#000000",
+            "tertiary": "#ac89ff",
+            "background": "#0b0e14",
+            "surface-variant": "#22262f",
+            "surface": "#0b0e14",
+            "on-surface-variant": "#a9abb3",
+            "on-surface": "#ecedf6",
+            "surface-bright": "#282c36",
+            "tertiary-dim": "#874cff",
+            "surface-container-highest": "#22262f",
+            "on-secondary": "#005359",
+            "secondary-container": "#006970",
+            "primary-fixed-dim": "#d061ff",
+            "outline-variant": "#45484f",
+            "on-primary": "#4f006d",
+            "secondary-fixed-dim": "#00deec",
+            "tertiary-fixed": "#bda1ff",
+            "surface-container": "#161a21",
+            "secondary-fixed": "#00eefc",
+            "tertiary-container": "#7000ff",
+            "surface-container-high": "#1c2028",
+            "secondary-dim": "#00deec",
+            "primary-fixed": "#d878ff",
+            "primary-container": "#d878ff",
+            "secondary": "#00eefc",
+            "surface-container-low": "#10131a",
+            "surface-dim": "#0b0e14",
+            "outline": "#73757d",
+            "primary-dim": "#bb00fc",
+            "primary": "#df8eff"
+          },
+          fontFamily: {
+            "headline": ["Space Grotesk"],
+            "body": ["Manrope"],
+            "label": ["Manrope"]
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    body { font-family: 'Manrope', sans-serif; background-color: #0b0e14; color: #ecedf6; }
+    .font-headline { font-family: 'Space Grotesk', sans-serif; }
+    .glass-panel { backdrop-filter: blur(20px); border-top: 0.5px solid rgba(255, 255, 255, 0.1); }
+    .neon-glow-primary { box-shadow: 0 0 40px rgba(187, 0, 252, 0.1); }
+    .neon-glow-secondary { box-shadow: 0 0 40px rgba(0, 238, 252, 0.1); }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .orb { position: absolute; border-radius: 50%; filter: blur(80px); z-index: -1; }
+    {% block extra_css %}{% endblock %}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+</head>
+<body class="bg-surface text-on-surface overflow-x-hidden min-h-screen">
+  
+  <!-- Background Orbs -->
+  <div class="orb w-96 h-96 bg-primary-dim/10 top-[-10%] right-[-5%]"></div>
+  <div class="orb w-[500px] h-[500px] bg-secondary-dim/5 bottom-[-10%] left-[-10%]"></div>
+  
+  {% if current_user.is_authenticated %}
+  <!-- SideNavBar (Desktop) -->
+  <aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-full p-6 bg-slate-900/40 backdrop-blur-xl border-r border-white/10 z-50 m-4 h-[calc(100vh-2rem)] rounded-3xl shadow-[0_0_20px_rgba(187,0,252,0.1)]">
+    <div class="flex items-center gap-3 mb-10 px-2">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-dim to-secondary flex items-center justify-center">
+        <span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">fitness_center</span>
+      </div>
+      <span class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#bb00fc] to-[#00eefc] font-headline tracking-tight">SmartGym</span>
+    </div>
+
+    <nav class="flex-1 space-y-2">
+      <a href="{{ url_for('dashboard.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl {% if request.endpoint == 'dashboard.index' %}text-[#00eefc] border-l-4 border-[#00eefc] bg-white/5{% else %}text-slate-400 hover:text-white hover:bg-white/10{% endif %} font-headline font-bold transition-all duration-300">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span>Dashboard</span>
+      </a>
+      <a href="{{ url_for('workout.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl {% if 'workout' in request.endpoint %}text-[#00eefc] border-l-4 border-[#00eefc] bg-white/5{% else %}text-slate-400 hover:text-white hover:bg-white/10{% endif %} transition-all font-headline font-bold">
+        <span class="material-symbols-outlined">fitness_center</span>
+        <span>Workouts</span>
+      </a>
+      <a href="{{ url_for('diet.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl {% if 'diet' in request.endpoint %}text-[#00eefc] border-l-4 border-[#00eefc] bg-white/5{% else %}text-slate-400 hover:text-white hover:bg-white/10{% endif %} transition-all font-headline font-bold">
+        <span class="material-symbols-outlined">restaurant</span>
+        <span>Diet Planner</span>
+      </a>
+      <a href="{{ url_for('attendance.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl {% if 'attendance' in request.endpoint %}text-[#00eefc] border-l-4 border-[#00eefc] bg-white/5{% else %}text-slate-400 hover:text-white hover:bg-white/10{% endif %} transition-all font-headline font-bold">
+        <span class="material-symbols-outlined">how_to_reg</span>
+        <span>Attendance</span>
+      </a>
+      <a href="{{ url_for('chatbot.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl {% if 'chatbot' in request.endpoint %}text-[#00eefc] border-l-4 border-[#00eefc] bg-white/5{% else %}text-slate-400 hover:text-white hover:bg-white/10{% endif %} transition-all font-headline font-bold">
+        <span class="material-symbols-outlined">smart_toy</span>
+        <span>AI Coach</span>
+      </a>
+      <a href="{{ url_for('membership.index') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl {% if 'membership' in request.endpoint %}text-[#00eefc] border-l-4 border-[#00eefc] bg-white/5{% else %}text-slate-400 hover:text-white hover:bg-white/10{% endif %} transition-all font-headline font-bold">
+        <span class="material-symbols-outlined">stars</span>
+        <span>Membership</span>
+      </a>
+      <a href="{{ url_for('auth.profile') }}" class="flex items-center gap-4 px-4 py-3 rounded-xl {% if 'profile' in request.endpoint %}text-[#00eefc] border-l-4 border-[#00eefc] bg-white/5{% else %}text-slate-400 hover:text-white hover:bg-white/10{% endif %} transition-all font-headline font-bold">
+        <span class="material-symbols-outlined">settings</span>
+        <span>Profile</span>
+      </a>
+    </nav>
+    <a href="{{ url_for('auth.logout') }}" class="mt-auto block text-center bg-gradient-to-r from-primary-dim to-tertiary-dim text-white py-4 px-6 rounded-2xl font-headline font-bold tracking-wide shadow-lg shadow-primary-dim/20 hover:scale-[1.02] transition-transform active:scale-95">
+      Logout
+    </a>
+  </aside>
+
+  <!-- TopNavBar -->
+  <header class="flex justify-between items-center w-full px-6 py-4 fixed top-0 z-40 md:pl-80 bg-slate-950/20 backdrop-blur-md border-b border-white/5">
+    <div class="flex items-center gap-6">
+      <div class="md:hidden flex items-center gap-2">
+        <span class="text-xl font-bold text-[#bb00fc] font-headline">SmartGym</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-8 font-['Manrope'] font-medium">
+        <a class="text-[#00eefc] font-bold border-b-2 border-[#00eefc] py-1" href="{{ url_for('dashboard.index') }}">Live Pulse</a>
+        <a class="text-slate-300 hover:text-fuchsia-300 transition-all" href="{{ url_for('leaderboard.index') }}">Leaderboard</a>
+      </nav>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="hidden sm:flex items-center bg-surface-container-lowest/50 border border-outline-variant/20 rounded-full px-4 py-1.5 focus-within:border-secondary transition-all">
+        <span class="material-symbols-outlined text-outline text-sm">search</span>
+        <input class="bg-transparent border-none focus:ring-0 text-sm text-on-surface w-40 outline-none" placeholder="Search data..." type="text"/>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full border-2 border-primary-dim/30 flex items-center justify-center bg-gradient-to-r from-primary to-secondary text-black font-bold">
+          {{ current_user.name[0].upper() }}
+        </div>
+      </div>
+    </div>
+  </header>
+  {% endif %}
+
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=True) %}
+  {% if messages %}
+  <div class="fixed top-20 right-6 z-50 flex flex-col gap-2" id="flash-container">
+    {% for category, message in messages %}
+    <div class="px-6 py-4 rounded-xl backdrop-blur-md text-sm font-bold shadow-2xl transition-all
+        {% if category == 'success' %}bg-secondary/20 border border-secondary text-secondary
+        {% else %}bg-error/20 border border-error text-error{% endif %}">
+      {{ message }}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  <!-- Main Content Canvas -->
+  <main class="{% if current_user.is_authenticated %}pt-24 pb-32 px-6 md:pl-80{% else %}p-6 flex items-center justify-center min-h-screen relative z-10{% endif %}">
+    {% block content %}{% endblock %}
+  </main>
+
+  {% if current_user.is_authenticated %}
+  <!-- BottomNavBar (Mobile) -->
+  <nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-6 pb-8 md:hidden bg-slate-900/80 backdrop-blur-2xl border-t border-white/5 rounded-t-[2.5rem] shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+    <a href="{{ url_for('dashboard.index') }}" class="flex flex-col items-center justify-center {% if request.endpoint == 'dashboard.index' %}bg-gradient-to-b from-fuchsia-500/20 to-cyan-500/20 text-white rounded-2xl ring-1 ring-white/20{% else %}text-slate-500{% endif %} px-4 py-2 transition-all">
+      <span class="material-symbols-outlined" {% if request.endpoint == 'dashboard.index' %}style="font-variation-settings: 'FILL' 1;"{% endif %}>home</span>
+      <span class="font-['Manrope'] text-[10px] uppercase tracking-widest mt-1">Home</span>
+    </a>
+    <a href="{{ url_for('workout.index') }}" class="flex flex-col items-center justify-center {% if 'workout' in request.endpoint %}bg-gradient-to-b from-fuchsia-500/20 to-cyan-500/20 text-white rounded-2xl ring-1 ring-white/20{% else %}text-slate-500{% endif %} px-4 py-2 transition-all">
+      <span class="material-symbols-outlined" {% if 'workout' in request.endpoint %}style="font-variation-settings: 'FILL' 1;"{% endif %}>fitness_center</span>
+      <span class="font-['Manrope'] text-[10px] uppercase tracking-widest mt-1">Workout</span>
+    </a>
+    <a href="{{ url_for('diet.index') }}" class="flex flex-col items-center justify-center {% if 'diet' in request.endpoint %}bg-gradient-to-b from-fuchsia-500/20 to-cyan-500/20 text-white rounded-2xl ring-1 ring-white/20{% else %}text-slate-500{% endif %} px-4 py-2 transition-all">
+      <span class="material-symbols-outlined" {% if 'diet' in request.endpoint %}style="font-variation-settings: 'FILL' 1;"{% endif %}>restaurant</span>
+      <span class="font-['Manrope'] text-[10px] uppercase tracking-widest mt-1">Diet</span>
+    </a>
+    <a href="{{ url_for('chatbot.index') }}" class="flex flex-col items-center justify-center {% if 'chatbot' in request.endpoint %}bg-gradient-to-b from-fuchsia-500/20 to-cyan-500/20 text-white rounded-2xl ring-1 ring-white/20{% else %}text-slate-500{% endif %} px-4 py-2 transition-all">
+      <span class="material-symbols-outlined" {% if 'chatbot' in request.endpoint %}style="font-variation-settings: 'FILL' 1;"{% endif %}>smart_toy</span>
+      <span class="font-['Manrope'] text-[10px] uppercase tracking-widest mt-1">Coach</span>
+    </a>
+  </nav>
+
+  <!-- Floating Action Button -->
+  <a href="{{ url_for('attendance.index') }}" class="fixed bottom-28 right-6 md:bottom-12 md:right-12 w-16 h-16 rounded-full bg-gradient-to-tr from-primary-dim to-secondary shadow-2xl shadow-secondary/30 flex items-center justify-center text-white z-50 hover:scale-110 active:scale-95 transition-all">
+    <span class="material-symbols-outlined text-3xl" style="font-variation-settings: 'wght' 600;">qr_code_scanner</span>
+  </a>
+  {% endif %}
+
+  <script>
+    setTimeout(() => {
+      const el = document.getElementById('flash-container');
+      if (el) el.remove();
+    }, 4000);
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

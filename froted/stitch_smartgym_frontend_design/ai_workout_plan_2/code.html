@@ -1,0 +1,201 @@
+<html><head>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/></head><body>{% extends "base.html" %}
+
+{% block content %}
+<div class="min-h-screen bg-surface text-on-surface font-body selection:bg-primary/30">
+<!-- SideNavBar (Desktop) -->
+<aside class="hidden md:flex flex-col w-64 fixed left-0 top-0 h-full p-6 bg-slate-900/40 backdrop-blur-xl border-r border-white/10 shadow-[0_0_20px_rgba(187,0,252,0.1)] z-50 m-4 rounded-3xl font-['Space_Grotesk'] font-bold tracking-tight">
+<div class="mb-10">
+<h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#bb00fc] to-[#00eefc]">SmartGym</h1>
+<p class="text-[10px] text-on-surface-variant tracking-[0.2em] uppercase mt-1">Elite Performance</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-3 p-3 rounded-xl text-slate-400 hover:text-white transition-colors hover:bg-white/10 hover:backdrop-blur-2xl transition-all duration-300 cubic-bezier(0.22, 1, 0.36, 1) hover:scale-[1.02]" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-xl text-slate-400 hover:text-white transition-colors hover:bg-white/10 hover:backdrop-blur-2xl transition-all duration-300 cubic-bezier(0.22, 1, 0.36, 1) hover:scale-[1.02]" href="#">
+<span class="material-symbols-outlined" data-icon="monitoring">monitoring</span>
+<span>Analytics</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-xl text-slate-400 hover:text-white transition-colors hover:bg-white/10 hover:backdrop-blur-2xl transition-all duration-300 cubic-bezier(0.22, 1, 0.36, 1) hover:scale-[1.02]" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span>Members</span>
+</a>
+<!-- Active Tab: Workouts -->
+<a class="flex items-center gap-3 p-3 rounded-xl text-[#00eefc] border-l-4 border-[#00eefc] bg-white/5 transition-all duration-300 cubic-bezier(0.22, 1, 0.36, 1) hover:scale-[1.02]" href="#">
+<span class="material-symbols-outlined" data-icon="fitness_center">fitness_center</span>
+<span>Workouts</span>
+</a>
+<a class="flex items-center gap-3 p-3 rounded-xl text-slate-400 hover:text-white transition-colors hover:bg-white/10 hover:backdrop-blur-2xl transition-all duration-300 cubic-bezier(0.22, 1, 0.36, 1) hover:scale-[1.02]" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-white/5">
+<button class="w-full py-4 bg-gradient-to-r from-primary-dim to-tertiary-dim rounded-full font-bold text-on-primary shadow-lg shadow-primary/20 hover:scale-105 transition-transform">
+                New Workout
+            </button>
+</div>
+</aside>
+<!-- TopNavBar (Mobile & Content Anchor) -->
+<header class="flex justify-between items-center w-full px-6 py-4 fixed top-0 z-40 md:pl-72 bg-slate-950/20 backdrop-blur-md font-['Manrope'] font-medium">
+<div class="flex items-center gap-4">
+<span class="md:hidden text-xl font-bold text-[#bb00fc]">SmartGym</span>
+<div class="hidden lg:flex items-center gap-6">
+<a class="text-slate-300 hover:text-fuchsia-300 transition-all" href="#">Live Pulse</a>
+<a class="text-slate-300 hover:text-fuchsia-300 transition-all" href="#">Community</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<input class="bg-surface-container-lowest border-none rounded-full py-2 px-4 text-sm focus:ring-2 focus:ring-secondary/50 w-64 outline-none" placeholder="Search routines..." type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-2 text-slate-500 text-sm" data-icon="search">search</span>
+</div>
+<button class="p-2 text-fuchsia-400 scale-95 active:scale-90 transition-all hover:text-fuchsia-300">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="w-10 h-10 rounded-full border-2 border-primary/30 overflow-hidden scale-95 active:scale-90 transition-all">
+<img class="w-full h-full object-cover" data-alt="close up portrait of a fit athlete with dramatic studio lighting and deep shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6cYFwQ2141CpUQOzwu35bu64IzD8AeN66FVxjljlXPLM4e2rzrRpWzu97x4IVmZABAZz4m2WmGwB7A5uy1eamxIk0Qyxkx4WWTzNE34hZFqEn5QhXoBTLqomYTv1WHqp59RQfDfBsn7AHJBIBWhjBAvECAJfFyGf3ADIUYPkJdPjeddN3RZt4C4yJGtzuoZaU2d_0ZYgQSiqMu7uSWUJHQQHaKqGnuAL9ZYTUTwbeC3V8T4KBoB8rK5Z5TK-W-P9cpcPdxvwaSlew"/>
+</div>
+</div>
+</header>
+<main class="pt-24 pb-32 px-6 md:pl-80 transition-all">
+<!-- Hero Section -->
+<section class="relative mb-12 rounded-[2.5rem] overflow-hidden p-8 md:p-12 min-h-[400px] flex flex-col justify-end">
+<img class="absolute inset-0 w-full h-full object-cover -z-10 opacity-40" data-alt="futuristic dark gym interior with neon blue and purple light leaks and high tech exercise equipment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAp7vaa_-mXR8Xz7krXLGl93Tmdinv44QFDvnuNCbRh5qylfAeBZNJ9KPAopFpVkduUCXo8soCQz3HUO6tbEkvQOjUs3reQE6i2c6U9iXYU6UC4z_Bv0oJZr0f_20vPx2kNUdPtdFvq4oeCf8h2mpyr6JUx70slufnYDOoL-rRpShcUqK6TT6VBYmjRbkpM1gcRsrLvP9KLGHE7t85ytC87tz1Smo9cXH4jcJdh9f6BnTKix9Xf8oc6UDnUrCBpmzGT3WeQEHiD7vba"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-surface/60 to-transparent -z-10"></div>
+<div class="relative z-10 max-w-2xl">
+<div class="flex items-center gap-3 mb-4">
+<span class="flex h-3 w-3 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-secondary"></span>
+</span>
+<span class="font-headline font-bold text-secondary tracking-widest text-sm uppercase">PULSE: TODAY'S FOCUS</span>
+</div>
+<h2 class="font-headline text-5xl md:text-7xl font-black text-on-surface mb-6 leading-tight">
+                    {{ today_plan.focus }}
+                </h2>
+<div class="flex flex-wrap gap-4">
+<button class="px-8 py-4 bg-gradient-to-r from-primary-dim to-tertiary-dim rounded-full font-headline font-bold text-on-primary-fixed shadow-[0_0_30px_rgba(187,0,252,0.3)] hover:scale-105 transition-transform duration-300">
+                        Start Workout
+                    </button>
+<button class="px-8 py-4 bg-white/5 backdrop-blur-md border border-white/10 rounded-full font-headline font-bold text-on-surface hover:bg-white/10 transition-all duration-300">
+                        View Exercises
+                    </button>
+</div>
+</div>
+</section>
+<!-- Weekly Schedule -->
+<section class="mb-12">
+<div class="flex justify-between items-end mb-8">
+<h3 class="font-headline text-3xl font-bold tracking-tight">Weekly Schedule</h3>
+<span class="text-on-surface-variant font-medium">Week 4 • Hypertrophy Phase</span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {% for day in weekly_plan %}
+                <div class="group relative bg-surface-container-low rounded-3xl p-6 border-t-[0.5px] border-white/10 backdrop-blur-sm transition-all duration-300 cubic-bezier(0.22, 1, 0.36, 1) hover:scale-[1.02] hover:bg-surface-container-high shadow-xl">
+                    {% if day.status == 'completed' %}
+                    <div class="absolute top-4 right-4 bg-secondary/10 backdrop-blur-md border border-secondary/20 px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] text-secondary" data-icon="check_circle">check_circle</span>
+<span class="text-[10px] font-bold text-secondary uppercase tracking-tighter">COMPLETED</span>
+</div>
+                    {% endif %}
+                    
+                    <span class="text-on-surface-variant font-headline font-bold opacity-50">{{ day.name }}</span>
+<h4 class="text-xl font-headline font-bold mt-2 mb-4 group-hover:text-primary transition-colors">{{ day.focus }}</h4>
+<div class="space-y-3">
+                        {% for exercise in day.exercises[:2] %}
+                        <div class="flex justify-between items-center text-sm">
+<span class="text-on-surface-variant">{{ exercise.name }}</span>
+<span class="text-on-surface font-mono">{{ exercise.sets }}x{{ exercise.reps }}</span>
+</div>
+                        {% endfor %}
+                        {% if day.exercises|length &gt; 2 %}
+                        <div class="pt-2 text-[10px] text-secondary font-bold uppercase tracking-widest">+ {{ day.exercises|length - 2 }} more exercises</div>
+                        {% endif %}
+                    </div>
+
+                    {% if day.focus == today_plan.focus %}
+                    <div class="absolute inset-0 border-2 border-secondary/30 rounded-3xl pointer-events-none"></div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+</section>
+<!-- Workout History -->
+<section>
+<h3 class="font-headline text-2xl font-bold tracking-tight mb-6">Recent Performance</h3>
+<div class="overflow-hidden bg-surface-container-low rounded-[2rem] border-t-[0.5px] border-white/5">
+
+                        {% for session in history %}
+                        
+                        {% endfor %}
+                    <table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-white/5">
+<th class="px-8 py-5 text-on-surface-variant font-headline text-sm uppercase tracking-widest">Date</th>
+<th class="px-8 py-5 text-on-surface-variant font-headline text-sm uppercase tracking-widest">Workout Type</th>
+<th class="px-8 py-5 text-on-surface-variant font-headline text-sm uppercase tracking-widest">Volume (KG)</th>
+<th class="px-8 py-5 text-on-surface-variant font-headline text-sm uppercase tracking-widest text-right">Intensity</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5"><tr class="hover:bg-white/5 transition-colors group">
+<td class="px-8 py-6 text-on-surface font-medium">{{ session.date }}</td>
+<td class="px-8 py-6">
+<div class="flex items-center gap-3">
+<span class="w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(223,142,255,0.6)]"></span>
+<span class="text-on-surface">{{ session.type }}</span>
+</div>
+</td>
+<td class="px-8 py-6 font-mono text-secondary-dim">{{ session.volume }}</td>
+<td class="px-8 py-6 text-right">
+<div class="inline-flex items-center gap-1 bg-surface-container-highest px-3 py-1 rounded-full text-xs font-bold text-on-surface-variant">
+                                    {{ session.intensity }}% <span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+</div>
+</td>
+</tr></tbody>
+</table>
+</div>
+</section>
+</main>
+<!-- FAB -->
+<button class="fixed bottom-24 right-6 md:bottom-10 md:right-10 z-50 w-16 h-16 bg-gradient-to-br from-primary to-tertiary-container rounded-full flex items-center justify-center text-white shadow-[0_0_40px_rgba(187,0,252,0.4)] group transition-transform hover:scale-110 active:scale-95">
+<div class="absolute inset-0 rounded-full border-2 border-primary animate-pulse"></div>
+<span class="material-symbols-outlined text-3xl" data-icon="add">add</span>
+<span class="absolute right-full mr-4 bg-surface-container-highest text-on-surface text-xs font-bold py-2 px-4 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap backdrop-blur-md border border-white/10 pointer-events-none">Log Workout</span>
+</button>
+<!-- BottomNavBar (Mobile) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-6 pb-8 md:hidden bg-slate-900/60 backdrop-blur-2xl border-t border-white/5 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] rounded-t-[2.5rem] font-['Manrope'] text-[10px] uppercase tracking-widest">
+<a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2 tap-highlight-transparent" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home">home</span>
+<span>Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2 tap-highlight-transparent" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="insights">insights</span>
+<span>Stats</span>
+</a>
+<!-- Active Tab: Plan -->
+<a class="flex flex-col items-center justify-center bg-gradient-to-b from-fuchsia-500/20 to-cyan-500/20 text-white rounded-2xl px-4 py-2 ring-1 ring-white/20 animate-pulse-subtle" href="#">
+<span class="material-symbols-outlined mb-1 text-cyan-400" data-icon="event_note">event_note</span>
+<span class="text-cyan-400">Plan</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 px-4 py-2 tap-highlight-transparent" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span>Profile</span>
+</a>
+</nav>
+</div>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap');
+    
+    .animate-pulse-subtle {
+        animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    
+    @keyframes pulse-subtle {
+        0%, 100% { opacity: 1; }
+        50% { opacity: .85; }
+    }
+</style>
+{% endblock %}</body></html>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SmartGym | AI Workout Plan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary-fixed-dim": "#b190ff",
+                      "surface-container-lowest": "#000000",
+                      "surface-variant": "#22262f",
+                      "tertiary-fixed": "#bda1ff",
+                      "surface-tint": "#df8eff",
+                      "tertiary": "#ac89ff",
+                      "surface-container-high": "#1c2028",
+                      "surface-container-highest": "#22262f",
+                      "secondary-fixed-dim": "#00deec",
+                      "primary-fixed": "#d878ff",
+                      "error": "#ff6e84",
+                      "surface-container": "#161a21",
+                      "tertiary-container": "#7000ff",
+                      "surface": "#0b0e14",
+                      "primary-container": "#d878ff",
+                      "error-container": "#a70138",
+                      "secondary-container": "#006970",
+                      "tertiary-dim": "#874cff",
+                      "on-surface": "#ecedf6",
+                      "on-primary-fixed": "#000000",
+                      "secondary-fixed": "#00eefc",
+                      "inverse-on-surface": "#52555c",
+                      "outline-variant": "#45484f",
+                      "error-dim": "#d73357",
+                      "on-primary-container": "#3d0055",
+                      "outline": "#73757d",
+                      "on-error-container": "#ffb2b9",
+                      "primary-dim": "#bb00fc",
+                      "on-error": "#490013",
+                      "primary-fixed-dim": "#d061ff",
+                      "on-tertiary-fixed-variant": "#4700a7",
+                      "secondary": "#00eefc",
+                      "inverse-primary": "#9a00d0",
+                      "surface-bright": "#282c36",
+                      "on-tertiary-fixed": "#1f0052",
+                      "on-tertiary-container": "#f8f1ff",
+                      "on-tertiary": "#290067",
+                      "primary": "#df8eff",
+                      "on-primary-fixed-variant": "#4b0068",
+                      "on-background": "#ecedf6",
+                      "on-secondary-fixed": "#003f43",
+                      "inverse-surface": "#f9f9ff",
+                      "on-surface-variant": "#a9abb3",
+                      "surface-dim": "#0b0e14",
+                      "secondary-dim": "#00deec",
+                      "on-primary": "#4f006d",
+                      "on-secondary-fixed-variant": "#005e64",
+                      "on-secondary-container": "#e3fdff",
+                      "surface-container-low": "#10131a",
+                      "on-secondary": "#005359",
+                      "background": "#0b0e14"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "fontFamily": {
+                      "headline": ["Space Grotesk"],
+                      "body": ["Manrope"],
+                      "label": ["Manrope"]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(34, 38, 47, 0.4);
+            backdrop-filter: blur(20px);
+            border-top: 0.5px solid rgba(255, 255, 255, 0.1);
+        }
+        .neon-gradient {
+            background: linear-gradient(135deg, #bb00fc 0%, #00eefc 100%);
+        }
+        .pulse-glow {
+            box-shadow: 0 0 20px rgba(0, 238, 252, 0.3);
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0b0e14; }
+        ::-webkit-scrollbar-thumb { background: #22262f; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-slate-950/40 backdrop-blur-xl border-b border-white/10 shadow-[0_0_20px_rgba(187,0,252,0.05)] flex justify-between items-center h-16 px-6 w-full">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-black italic tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-fuchsia-500 to-cyan-400 font-headline">SmartGym</span>
+<div class="hidden md:flex gap-6">
+<a class="text-fuchsia-400 font-bold font-headline text-lg tracking-tight" href="#">Workouts</a>
+<a class="text-slate-400 hover:text-white transition-colors font-headline text-lg tracking-tight" href="#">Analytics</a>
+<a class="text-slate-400 hover:text-white transition-colors font-headline text-lg tracking-tight" href="#">Community</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-400 hover:bg-white/5 transition-all duration-300 rounded-full cursor-pointer active:scale-95">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-slate-400 hover:bg-white/5 transition-all duration-300 rounded-full cursor-pointer active:scale-95">
+<span class="material-symbols-outlined">bolt</span>
+</button>
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden border border-white/10">
+<img class="w-full h-full object-cover" data-alt="close-up portrait of a determined athlete with sweat on brow, dramatic neon blue lighting against a dark gym background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBd9IBW_CgLVWpLNuPIOewVkoRW5YMAjc5bGg0xan2YYrMlLS-1V8c1leZfLwZD872rJvMVnR5aPQBx4rBQCX_UB7Q5td3cqTpGEHlxeRqk4GH0mF5wktrq-d8QOLz-MjP3Z-okDf0Z3mLZpue4y9UaChFHEPcpfGvDdGpH1-hZEoSFxoTnf7hdq-gil_bD0y_xhzte8U64oljf7GSj6Qn4VdVLVLRZHuk10oWXo4XZAnLVp4LyyqZXTdVFEBo5XDbn_kN4qK9dz7ua"/>
+</div>
+</div>
+</nav>
+<!-- SideNavBar (Desktop Only) -->
+<aside class="fixed left-0 top-0 h-full w-64 z-40 bg-slate-950/60 backdrop-blur-2xl border-r border-white/5 shadow-2xl shadow-fuchsia-500/10 flex flex-col py-8 hidden lg:flex">
+<div class="px-6 mb-10">
+<h2 class="text-xl font-bold font-headline text-white">SmartGym</h2>
+<p class="text-xs text-on-surface-variant font-medium">The Synthetic Pulse</p>
+</div>
+<nav class="flex-1">
+<a class="flex items-center gap-4 text-slate-500 py-3 px-6 hover:text-slate-200 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span class="font-['Manrope'] font-medium text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-4 text-slate-500 py-3 px-6 hover:text-slate-200 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="font-['Manrope'] font-medium text-sm">Analytics</span>
+</a>
+<a class="flex items-center gap-4 text-slate-500 py-3 px-6 hover:text-slate-200 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-['Manrope'] font-medium text-sm">Members</span>
+</a>
+<a class="flex items-center gap-4 text-cyan-400 border-l-4 border-cyan-400 bg-cyan-400/10 py-3 px-6 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">fitness_center</span>
+<span class="font-['Manrope'] font-medium text-sm">Workouts</span>
+</a>
+<a class="flex items-center gap-4 text-slate-500 py-3 px-6 hover:text-slate-200 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-['Manrope'] font-medium text-sm">Settings</span>
+</a>
+</nav>
+</aside>
+<main class="lg:ml-64 pt-24 pb-32 px-6 lg:px-12 max-w-7xl mx-auto">
+<!-- Hero: Today's Plan -->
+<section class="mb-12 relative group">
+<div class="absolute -inset-1 bg-gradient-to-r from-primary-dim to-secondary opacity-20 blur-2xl group-hover:opacity-30 transition duration-1000"></div>
+<div class="relative glass-panel rounded-3xl overflow-hidden flex flex-col md:flex-row gap-8 p-8 border border-white/10">
+<div class="flex-1">
+<div class="flex items-center gap-2 mb-4">
+<span class="inline-block w-2 h-2 rounded-full bg-secondary pulse-glow"></span>
+<span class="text-xs font-bold tracking-[0.2em] text-secondary uppercase">Today's Protocol</span>
+</div>
+<h1 class="text-4xl md:text-6xl font-black font-headline mb-4 tracking-tighter leading-none">Hypertrophy: <br/><span class="text-primary">Posterior Chain</span></h1>
+<p class="text-on-surface-variant max-w-md mb-8">Generated by AI Pulse based on your recovery score of 88% and current strength plateaus.</p>
+<div class="flex flex-wrap gap-4">
+<button class="px-8 py-3 rounded-full neon-gradient text-on-primary-fixed font-bold flex items-center gap-2 hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+                            Begin Session
+                        </button>
+<button class="px-8 py-3 rounded-full glass-panel border border-white/10 text-on-surface font-bold hover:bg-white/5 transition-all">
+                            View Exercises
+                        </button>
+</div>
+</div>
+<div class="md:w-1/3 grid grid-cols-1 gap-3">
+<div class="glass-panel p-4 rounded-2xl flex items-center gap-4">
+<div class="w-10 h-10 rounded-xl bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">timer</span>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant">Duration</p>
+<p class="font-bold">65 Minutes</p>
+</div>
+</div>
+<div class="glass-panel p-4 rounded-2xl flex items-center gap-4">
+<div class="w-10 h-10 rounded-xl bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">local_fire_department</span>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant">Est. Burn</p>
+<p class="font-bold">540 kcal</p>
+</div>
+</div>
+<div class="glass-panel p-4 rounded-2xl flex items-center gap-4">
+<div class="w-10 h-10 rounded-xl bg-tertiary-container/20 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">monitoring</span>
+</div>
+<div>
+<p class="text-xs text-on-surface-variant">Complexity</p>
+<p class="font-bold">Advanced</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Weekly Pulse Navigation -->
+<section class="mb-12">
+<div class="flex justify-between items-end mb-6">
+<div>
+<h2 class="text-2xl font-bold font-headline tracking-tight">Weekly Pulse</h2>
+<p class="text-on-surface-variant text-sm">Your AI-optimized training cycle</p>
+</div>
+<button class="text-primary text-sm font-bold flex items-center gap-1 hover:gap-2 transition-all">
+                    Full Calendar <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+<div class="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
+<!-- Active/Today -->
+<div class="min-w-[140px] flex-1 glass-panel p-5 rounded-3xl border-2 border-primary ring-4 ring-primary/10 relative overflow-hidden group cursor-pointer transition-all">
+<div class="absolute top-0 right-0 p-2">
+<span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Today</p>
+<p class="text-xl font-black font-headline mb-3 italic">MON 12</p>
+<div class="h-1 w-full bg-white/10 rounded-full mb-3 overflow-hidden">
+<div class="h-full w-1/3 bg-primary"></div>
+</div>
+<p class="text-xs font-bold text-white leading-tight">Posterior Chain</p>
+</div>
+<!-- Upcoming Days -->
+<div class="min-w-[140px] flex-1 glass-panel p-5 rounded-3xl border border-white/5 hover:border-white/20 cursor-pointer transition-all">
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Tomorrow</p>
+<p class="text-xl font-black font-headline mb-3 italic text-on-surface-variant">TUE 13</p>
+<div class="h-1 w-full bg-white/5 rounded-full mb-3"></div>
+<p class="text-xs font-bold text-on-surface-variant leading-tight">Active Recovery</p>
+</div>
+<div class="min-w-[140px] flex-1 glass-panel p-5 rounded-3xl border border-white/5 hover:border-white/20 cursor-pointer transition-all">
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Scheduled</p>
+<p class="text-xl font-black font-headline mb-3 italic text-on-surface-variant">WED 14</p>
+<div class="h-1 w-full bg-white/5 rounded-full mb-3"></div>
+<p class="text-xs font-bold text-on-surface-variant leading-tight">Chest &amp; Tris</p>
+</div>
+<div class="min-w-[140px] flex-1 glass-panel p-5 rounded-3xl border border-white/5 hover:border-white/20 cursor-pointer transition-all">
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Scheduled</p>
+<p class="text-xl font-black font-headline mb-3 italic text-on-surface-variant">THU 15</p>
+<div class="h-1 w-full bg-white/5 rounded-full mb-3"></div>
+<p class="text-xs font-bold text-on-surface-variant leading-tight">Lower Body Power</p>
+</div>
+<div class="min-w-[140px] flex-1 glass-panel p-5 rounded-3xl border border-white/5 hover:border-white/20 cursor-pointer transition-all">
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Scheduled</p>
+<p class="text-xl font-black font-headline mb-3 italic text-on-surface-variant">FRI 16</p>
+<div class="h-1 w-full bg-white/5 rounded-full mb-3"></div>
+<p class="text-xs font-bold text-on-surface-variant leading-tight">Shoulder Mobility</p>
+</div>
+<div class="min-w-[140px] flex-1 glass-panel p-5 rounded-3xl border border-white/5 hover:border-white/20 cursor-pointer transition-all">
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Scheduled</p>
+<p class="text-xl font-black font-headline mb-3 italic text-on-surface-variant">SAT 17</p>
+<div class="h-1 w-full bg-white/5 rounded-full mb-3"></div>
+<p class="text-xs font-bold text-on-surface-variant leading-tight">Full Body Metcon</p>
+</div>
+<div class="min-w-[140px] flex-1 glass-panel p-5 rounded-3xl border border-white/5 hover:border-white/20 cursor-pointer transition-all">
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant mb-1">Scheduled</p>
+<p class="text-xl font-black font-headline mb-3 italic text-on-surface-variant">SUN 18</p>
+<div class="h-1 w-full bg-white/5 rounded-full mb-3"></div>
+<p class="text-xs font-bold text-on-surface-variant leading-tight">Rest &amp; Bio-Sync</p>
+</div>
+</div>
+</section>
+<div class="grid lg:grid-cols-3 gap-8">
+<!-- Left Col: Upcoming Workouts -->
+<div class="lg:col-span-1">
+<h3 class="text-xl font-bold font-headline mb-6 tracking-tight">Queue</h3>
+<div class="space-y-4">
+<div class="glass-panel p-4 rounded-2xl border border-white/5 hover:border-secondary/20 hover:bg-secondary/5 transition-all cursor-pointer group">
+<div class="flex items-start justify-between mb-2">
+<span class="text-[10px] font-bold text-secondary uppercase tracking-widest">Tomorow • 07:00 AM</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">more_vert</span>
+</div>
+<h4 class="font-bold mb-1">Active Recovery Flow</h4>
+<p class="text-xs text-on-surface-variant">Focus on dynamic stretching and zone 2 cardio.</p>
+</div>
+<div class="glass-panel p-4 rounded-2xl border border-white/5 hover:border-primary/20 hover:bg-primary/5 transition-all cursor-pointer group">
+<div class="flex items-start justify-between mb-2">
+<span class="text-[10px] font-bold text-primary uppercase tracking-widest">Wed 14 • 18:30 PM</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">more_vert</span>
+</div>
+<h4 class="font-bold mb-1">Chest &amp; Triceps Build</h4>
+<p class="text-xs text-on-surface-variant">Hypertrophy focus. Moderate volume, high intensity.</p>
+</div>
+<div class="glass-panel p-4 rounded-2xl border border-white/5 hover:border-tertiary/20 hover:bg-tertiary/5 transition-all cursor-pointer group">
+<div class="flex items-start justify-between mb-2">
+<span class="text-[10px] font-bold text-tertiary uppercase tracking-widest">Thu 15 • 06:00 AM</span>
+<span class="material-symbols-outlined text-on-surface-variant text-sm">more_vert</span>
+</div>
+<h4 class="font-bold mb-1">Leg Power Phase</h4>
+<p class="text-xs text-on-surface-variant">Explosive movements and foundational strength.</p>
+</div>
+</div>
+</div>
+<!-- Right Col: History Graphical Table -->
+<div class="lg:col-span-2">
+<div class="flex justify-between items-center mb-6">
+<h3 class="text-xl font-bold font-headline tracking-tight">Performance History</h3>
+<div class="flex gap-2">
+<span class="text-xs px-3 py-1 rounded-full bg-surface-container-highest border border-white/10">30 Days</span>
+<span class="text-xs px-3 py-1 rounded-full bg-white/5 border border-white/5 text-on-surface-variant">All Time</span>
+</div>
+</div>
+<div class="glass-panel rounded-3xl border border-white/5 overflow-hidden">
+<table class="w-full text-left">
+<thead class="bg-white/5 border-b border-white/10">
+<tr>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant">Workout</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant">Date</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant">Load (kg)</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant">Volume</th>
+<th class="px-6 py-4 text-xs font-bold uppercase tracking-widest text-on-surface-variant">Trend</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5">
+<tr class="hover:bg-white/5 transition-colors">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-sm">fitness_center</span>
+</div>
+<span class="font-bold text-sm">Push Day A</span>
+</div>
+</td>
+<td class="px-6 py-5 text-sm text-on-surface-variant">Mar 10, 2024</td>
+<td class="px-6 py-5 text-sm font-medium">8,450</td>
+<td class="px-6 py-5">
+<div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden max-w-[80px]">
+<div class="bg-primary h-full w-[85%]"></div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="text-secondary flex items-center gap-1 text-xs font-bold">
+<span class="material-symbols-outlined text-sm">trending_up</span> +4%
+                                    </span>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-secondary/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined text-sm">directions_run</span>
+</div>
+<span class="font-bold text-sm">HIIT Pulse</span>
+</div>
+</td>
+<td class="px-6 py-5 text-sm text-on-surface-variant">Mar 08, 2024</td>
+<td class="px-6 py-5 text-sm font-medium">--</td>
+<td class="px-6 py-5">
+<div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden max-w-[80px]">
+<div class="bg-secondary h-full w-[60%]"></div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="text-on-surface-variant flex items-center gap-1 text-xs font-bold">
+<span class="material-symbols-outlined text-sm">horizontal_rule</span> 0%
+                                    </span>
+</td>
+</tr>
+<tr class="hover:bg-white/5 transition-colors">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-tertiary/20 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-sm">inventory_2</span>
+</div>
+<span class="font-bold text-sm">Pull Day B</span>
+</div>
+</td>
+<td class="px-6 py-5 text-sm text-on-surface-variant">Mar 07, 2024</td>
+<td class="px-6 py-5 text-sm font-medium">9,120</td>
+<td class="px-6 py-5">
+<div class="w-full bg-white/10 h-1.5 rounded-full overflow-hidden max-w-[80px]">
+<div class="bg-tertiary h-full w-[95%]"></div>
+</div>
+</td>
+<td class="px-6 py-5">
+<span class="text-secondary flex items-center gap-1 text-xs font-bold">
+<span class="material-symbols-outlined text-sm">trending_up</span> +7%
+                                    </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB: Log Workout -->
+<button class="fixed bottom-24 lg:bottom-12 right-6 lg:right-12 p-4 md:px-6 md:py-4 rounded-full neon-gradient text-on-primary-fixed shadow-2xl flex items-center gap-2 hover:scale-110 active:scale-95 transition-all z-50 group">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+<span class="font-bold hidden md:inline">Log Workout</span>
+</button>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 bg-slate-950/80 backdrop-blur-lg flex justify-around items-center px-4 pb-6 pt-3 rounded-t-3xl border-t border-white/10 shadow-[0_-10px_40px_rgba(0,0,0,0.5)]">
+<a class="flex flex-col items-center justify-center text-slate-500 p-2 hover:text-fuchsia-300" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-['Manrope'] text-[10px] font-bold uppercase tracking-widest mt-1">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 p-2 hover:text-fuchsia-300" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-['Manrope'] text-[10px] font-bold uppercase tracking-widest mt-1">Stats</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-fuchsia-500/20 text-fuchsia-400 rounded-2xl p-2 scale-110" href="#">
+<span class="material-symbols-outlined">exercise</span>
+<span class="font-['Manrope'] text-[10px] font-bold uppercase tracking-widest mt-1">Gym</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 p-2 hover:text-fuchsia-300" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-['Manrope'] text-[10px] font-bold uppercase tracking-widest mt-1">Users</span>
+</a>
+<a class="flex flex-col items-center justify-center text-slate-500 p-2 hover:text-fuchsia-300" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-['Manrope'] text-[10px] font-bold uppercase tracking-widest mt-1">Gear</span>
+</a>
+</nav>
+<!-- Background Orbs -->
+<div class="fixed top-0 left-0 w-full h-full pointer-events-none -z-10 overflow-hidden">
+<div class="absolute top-[10%] left-[20%] w-[40vw] h-[40vw] bg-primary/10 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-[10%] right-[10%] w-[30vw] h-[30vw] bg-secondary/10 rounded-full blur-[100px]"></div>
+</div>
+</body></html>

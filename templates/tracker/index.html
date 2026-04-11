@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Progress Tracker{% endblock %}
+
+{% block content %}
+<header class="mb-10 mt-4">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div>
+            <h1 class="font-headline text-4xl font-bold tracking-tight text-on-surface">Data <span class="bg-clip-text text-transparent bg-gradient-to-r from-[#bb00fc] to-[#d878ff]">Tracker</span></h1>
+            <p class="text-[#a9abb3] mt-2">Log your daily weight to let the AI calibrate your diet and workout plans.</p>
+        </div>
+    </div>
+</header>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div class="glass-panel p-8 rounded-[2.5rem]" style="background: rgba(34, 38, 47, 0.4);">
+        <div class="flex items-center gap-3 mb-8">
+            <span class="material-symbols-outlined text-[#bb00fc]">scale</span>
+            <h2 class="font-headline text-xl font-bold tracking-tight">Log Bodyweight</h2>
+        </div>
+        <form action="{{ url_for('tracker.log_weight') }}" method="POST" class="space-y-6">
+            <div class="group relative">
+                <label class="block text-[10px] uppercase tracking-[0.2em] text-[#a9abb3] font-bold mb-2 ml-1">Current Weight (kg)</label>
+                <div class="flex items-center gap-4">
+                    <input name="weight_kg" class="flex-1 bg-[#10131a] border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#bb00fc]/50 outline-none text-2xl font-headline font-bold" type="number" step="0.1" required/>
+                    <button type="submit" class="p-4 rounded-2xl bg-gradient-to-r from-[#d878ff] to-[#bb00fc] text-black hover:scale-105 active:scale-95 transition-all outline-none">
+                        <span class="material-symbols-outlined font-bold">add</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="glass-panel p-8 rounded-[2.5rem]" style="background: rgba(34, 38, 47, 0.4);">
+        <h3 class="text-xl font-bold font-headline mb-6">Recent Measurements</h3>
+        <div class="space-y-4">
+            {% for log in weight_logs|reverse %}
+            <div class="p-4 rounded-2xl bg-white/5 border border-white/5 flex justify-between items-center group hover:border-[#00eefc]/50 transition-all">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 rounded-full bg-[#006970]/30 flex items-center justify-center text-[#00eefc]">
+                        <span class="material-symbols-outlined">trending_flat</span>
+                    </div>
+                    <div>
+                        <p class="font-bold font-headline text-xl">{{ log.weight_kg }} <span class="text-xs text-[#a9abb3] tracking-widest font-body uppercase">kg</span></p>
+                        <p class="text-[10px] text-[#a9abb3]">{{ log.logged_date.strftime('%B %d, %Y') }}</p>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <p class="text-sm text-[#a9abb3]">No weight logs yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
