@@ -10,9 +10,17 @@ app = create_app()
 def inject_now():
     return {'now': datetime.now}
 
-# Auto-create tables on first run (useful for cloud deployment)
+# Auto-create tables on first run
 with app.app_context():
     db.create_all()
+    # If the database is empty, automatically seed it with basic data
+    from app.models import User
+    if User.query.first() is None:
+        try:
+            import setup_db
+            print("[INFO] Database was empty. Auto-seeded with demo data.")
+        except Exception as e:
+            print("[ERROR] Failed to auto-seed:", e)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
