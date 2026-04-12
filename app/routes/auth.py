@@ -15,17 +15,20 @@ def register():
         if User.query.filter_by(email=data['email']).first():
             flash('Email already registered.', 'error')
             return redirect(url_for('auth.register'))
+        def safe_int(v): return int(v) if v and str(v).strip() else None
+        def safe_float(v): return float(v) if v and str(v).strip() else None
+
         user = User(
             name=data['name'],
             email=data['email'],
-            phone=data.get('phone'),
+            phone=data.get('phone') or None,
             gender=data.get('gender'),
-            age=int(data.get('age', 0)) or None,
-            weight_kg=float(data.get('weight', 0)) or None,
-            height_cm=float(data.get('height', 0)) or None,
+            age=safe_int(data.get('age')),
+            weight_kg=safe_float(data.get('weight')),
+            height_cm=safe_float(data.get('height')),
             goal=data.get('goal', 'maintain'),
             fitness_level=data.get('level', 'beginner'),
-            daily_budget=float(data.get('budget', 150)),
+            daily_budget=safe_float(data.get('budget')) or 150.0,
             qr_token=str(uuid.uuid4()),
         )
         user.set_password(data['password'])
@@ -46,7 +49,8 @@ def login():
         user = User.query.filter_by(email=request.form['email']).first()
         if user and user.check_password(request.form['password']):
             login_user(user, remember=True)
-            return redirect(url_for('dashboard.index'))
+            next_page = request.args.get('next')
+            return redirect(next_page or url_for('dashboard.index'))
         flash('Invalid email or password.', 'error')
     return render_template('auth/login.html')
 

@@ -43,31 +43,37 @@ def index():
 @tracker_bp.route('/log-weight', methods=['POST'])
 @login_required
 def log_weight():
-    data = request.get_json()
+    try:
+        weight = float(request.form.get('weight_kg', '') or 0)
+    except (ValueError, TypeError):
+        weight = 0
+
+    if not weight:
+        from flask import flash, redirect, url_for
+        flash('Please enter a valid weight.', 'error')
+        return redirect(url_for('tracker.index'))
+
     existing = WeightLog.query.filter_by(
         user_id=current_user.id, logged_date=date.today()
     ).first()
-    weight = float(data.get('weight', 0))
-    if not weight:
-        return jsonify({"success": False, "message": "Invalid weight"})
 
     if existing:
         existing.weight_kg = weight
-        existing.body_fat = data.get('body_fat')
-        existing.notes = data.get('notes', '')
     else:
         log = WeightLog(
             user_id=current_user.id,
             weight_kg=weight,
-            body_fat=data.get('body_fat'),
-            notes=data.get('notes', ''),
+            notes=request.form.get('notes', ''),
         )
         db.session.add(log)
-        # Update user's current weight
-        current_user.weight_kg = weight
 
+    # Always keep user's current weight in sync
+    current_user.weight_kg = weight
     db.session.commit()
-    return jsonify({"success": True, "bmi": current_user.bmi})
+
+    from flask import flash, redirect, url_for
+    flash(f'Weight logged: {weight} kg ✅', 'success')
+    return redirect(url_for('tracker.index'))
 
 
 @tracker_bp.route('/api/weekly')

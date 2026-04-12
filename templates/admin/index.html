@@ -1,0 +1,111 @@
+{% extends "admin/base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+  <h1 class="font-headline text-3xl font-black">Admin <span style="background: linear-gradient(135deg,#bb00fc,#00eefc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Overview</span></h1>
+  <p class="text-slate-400 mt-1">Real-time stats for SmartGym</p>
+</div>
+
+<!-- Stat Cards -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+  {% for icon, color, val, label in [
+    ('group', '#00eefc', total_members, 'Total Members'),
+    ('card_membership', '#bb00fc', active_memberships, 'Active Plans'),
+    ('how_to_reg', '#ac89ff', today_attendance, "Today's Check-ins"),
+    ('payments', '#00eefc', '₹' ~ total_revenue|int, 'Total Revenue'),
+  ] %}
+  <div class="glass rounded-2xl p-6">
+    <div class="flex items-center justify-between mb-4">
+      <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: {{ color }}15;">
+        <span class="material-symbols-outlined" style="color: {{ color }};">{{ icon }}</span>
+      </div>
+    </div>
+    <p class="font-headline text-3xl font-black mb-1">{{ val }}</p>
+    <p class="text-slate-400 text-xs uppercase tracking-widest">{{ label }}</p>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- Charts Row -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+  <div class="glass rounded-2xl p-6">
+    <h3 class="font-headline font-bold mb-4">Attendance (Last 7 Days)</h3>
+    <canvas id="attendanceChart" height="220"></canvas>
+  </div>
+  <div class="glass rounded-2xl p-6">
+    <h3 class="font-headline font-bold mb-4">Revenue by Plan</h3>
+    <canvas id="revenueChart" height="220"></canvas>
+  </div>
+</div>
+
+<!-- Recent Members + Expiring -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <div class="glass rounded-2xl p-6">
+    <h3 class="font-headline font-bold mb-4">Recent Members</h3>
+    <div class="space-y-3">
+      {% for m in recent_members %}
+      <a href="{{ url_for('admin.member_detail', user_id=m.id) }}" class="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all">
+        <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-[#bb00fc]/40 to-[#00eefc]/40 flex items-center justify-center font-bold text-sm">{{ m.name[0].upper() }}</div>
+        <div class="flex-1 min-w-0">
+          <p class="font-bold text-sm truncate">{{ m.name }}</p>
+          <p class="text-xs text-slate-400 truncate">{{ m.email }}</p>
+        </div>
+        <span class="text-xs px-2 py-1 rounded-full capitalize {% if m.is_active %}bg-emerald-500/20 text-emerald-400{% else %}bg-red-500/20 text-red-400{% endif %}">
+          {{ 'Active' if m.is_active else 'Inactive' }}
+        </span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="glass rounded-2xl p-6">
+    <h3 class="font-headline font-bold mb-4 text-amber-400">⚠️ Expiring Soon (7 days)</h3>
+    {% if expiring %}
+    <div class="space-y-3">
+      {% for mem in expiring %}
+      <div class="flex items-center gap-3 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
+        <div class="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center font-bold text-sm text-amber-400">{{ mem.user.name[0].upper() }}</div>
+        <div class="flex-1">
+          <p class="font-bold text-sm">{{ mem.user.name }}</p>
+          <p class="text-xs text-slate-400">{{ mem.plan.name }} — expires {{ mem.end_date.strftime('%d %b') }}</p>
+        </div>
+        <p class="text-amber-400 text-sm font-bold">{{ mem.days_remaining }}d</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-slate-400 text-sm">No memberships expiring soon. 🎉</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+fetch("{{ url_for('admin.api_stats') }}")
+  .then(r => r.json())
+  .then(data => {
+    // Attendance Chart
+    new Chart(document.getElementById('attendanceChart'), {
+      type: 'bar',
+      data: {
+        labels: data.attendance.map(d => d.date),
+        datasets: [{ label: 'Check-ins', data: data.attendance.map(d => d.count),
+          backgroundColor: 'rgba(0,238,252,0.3)', borderColor: '#00eefc', borderWidth: 2, borderRadius: 6 }]
+      },
+      options: { plugins: { legend: { display: false } }, scales: { x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#a9abb3' } }, y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#a9abb3', stepSize: 1 } } }, responsive: true }
+    });
+    // Revenue Chart
+    new Chart(document.getElementById('revenueChart'), {
+      type: 'doughnut',
+      data: {
+        labels: data.revenue_by_plan.map(d => d.plan),
+        datasets: [{ data: data.revenue_by_plan.map(d => d.total),
+          backgroundColor: ['rgba(187,0,252,0.6)', 'rgba(0,238,252,0.6)', 'rgba(172,137,255,0.6)'],
+          borderWidth: 0 }]
+      },
+      options: { plugins: { legend: { labels: { color: '#ecedf6' } } }, responsive: true }
+    });
+  });
+</script>
+{% endblock %}

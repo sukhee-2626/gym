@@ -86,10 +86,19 @@ class MembershipPlan(db.Model):
     name         = db.Column(db.String(100), nullable=False)   # Basic | Pro | Elite
     duration_days= db.Column(db.Integer, nullable=False)       # 30, 90, 180, 365
     price        = db.Column(db.Float, nullable=False)         # INR
-    features     = db.Column(db.Text)                          # JSON list of features
+    features     = db.Column(db.Text)                          # Comma list of features
     is_active    = db.Column(db.Boolean, default=True)
 
     memberships  = db.relationship('Membership', backref='plan', lazy=True)
+
+    @property
+    def price_monthly(self):
+        """Return per-month equivalent price for display"""
+        if self.duration_days >= 365:
+            return round(self.price / 12)
+        elif self.duration_days >= 90:
+            return round(self.price / 3)
+        return self.price
 
 
 class Membership(db.Model):
@@ -121,14 +130,19 @@ class Membership(db.Model):
 class Exercise(db.Model):
     __tablename__ = 'exercises'
 
-    id             = db.Column(db.Integer, primary_key=True)
-    name           = db.Column(db.String(100), nullable=False)
-    muscle_group   = db.Column(db.String(50))   # chest | back | legs | shoulders | arms | core | cardio
-    equipment      = db.Column(db.String(50))   # bodyweight | dumbbell | barbell | machine | none
-    difficulty     = db.Column(db.String(20))   # beginner | intermediate | advanced
-    calories_per_min= db.Column(db.Float, default=5.0)
-    description    = db.Column(db.Text)
-    video_url      = db.Column(db.String(200))
+    id                 = db.Column(db.Integer, primary_key=True)
+    name               = db.Column(db.String(100), nullable=False)
+    muscle_group       = db.Column(db.String(50))   # chest | back | legs | shoulders | arms | core | cardio
+    equipment          = db.Column(db.String(50), default='bodyweight')
+    difficulty         = db.Column(db.String(20), default='beginner')
+    calories_per_min   = db.Column(db.Float, default=5.0)
+    description        = db.Column(db.Text)
+    youtube_url        = db.Column(db.String(300))   # Full YouTube video URL
+    goal_tag           = db.Column(db.String(100), default='all')  # weight_loss | gain_muscle | maintain | all
+    sets_recommended   = db.Column(db.Integer, default=3)
+    reps_recommended   = db.Column(db.String(20), default='12')
+    rest_seconds       = db.Column(db.Integer, default=60)
+    is_active          = db.Column(db.Boolean, default=True)
 
 
 class WorkoutPlan(db.Model):

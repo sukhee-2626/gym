@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SmartGym — AI-Powered Fitness</title>
+  <meta name="description" content="SmartGym is your AI-powered fitness companion. Personalized workouts, diet plans, and real-time progress tracking designed for your goals."/>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
+  <style>
+    body { font-family: 'Manrope', sans-serif; background: #0b0e14; color: #ecedf6; overflow-x: hidden; }
+    .font-headline { font-family: 'Space Grotesk', sans-serif; }
+    .grad-text { background: linear-gradient(135deg, #bb00fc, #00eefc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .glass { background: rgba(34, 38, 47, 0.5); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.07); }
+    .neon-btn { background: linear-gradient(135deg, #bb00fc, #00eefc); }
+    .orb1 { position: fixed; top: -15%; right: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(187,0,252,0.12) 0%, transparent 70%); border-radius: 50%; pointer-events: none; z-index: 0; }
+    .orb2 { position: fixed; bottom: -10%; left: -5%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(0,238,252,0.08) 0%, transparent 70%); border-radius: 50%; pointer-events: none; z-index: 0; }
+    .feature-card:hover { transform: translateY(-4px); transition: transform 0.3s ease; }
+    .plan-card:hover { transform: scale(1.02); transition: transform 0.3s ease; }
+    nav a { transition: color 0.2s; }
+  </style>
+</head>
+<body>
+<div class="orb1"></div>
+<div class="orb2"></div>
+
+<!-- ── NAVBAR ─────────────────────────────────── -->
+<nav class="fixed w-full z-50 top-0 left-0 bg-[#0b0e14]/80 backdrop-blur-xl border-b border-white/5 px-6 py-4 flex justify-between items-center">
+  <a href="#" class="font-headline text-2xl font-black grad-text tracking-tighter">SmartGym</a>
+  <div class="hidden md:flex gap-8 font-medium text-slate-400">
+    <a href="#features" class="hover:text-white">Features</a>
+    <a href="#plans" class="hover:text-white">Plans</a>
+    <a href="#about" class="hover:text-white">About</a>
+    <a href="#contact" class="hover:text-white">Contact</a>
+  </div>
+  <div class="flex gap-3">
+    <a href="{{ url_for('auth.login') }}" class="px-5 py-2 rounded-full border border-white/20 text-white text-sm font-bold hover:bg-white/10 transition-all">Login</a>
+    <a href="{{ url_for('auth.register') }}" class="px-5 py-2 rounded-full neon-btn text-black text-sm font-black hover:opacity-90 transition-all">Join Free</a>
+  </div>
+</nav>
+
+<!-- ── HERO ───────────────────────────────────── -->
+<section class="relative min-h-screen flex flex-col items-center justify-center text-center px-6 pt-20 z-10">
+  <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[#00eefc]/30 bg-[#00eefc]/10 text-[#00eefc] text-xs font-bold uppercase tracking-widest mb-8">
+    <span class="w-2 h-2 rounded-full bg-[#00eefc] animate-pulse"></span>
+    AI-Powered Fitness Platform
+  </div>
+  <h1 class="font-headline text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter leading-none mb-6">
+    Train Smarter.<br/>
+    <span class="grad-text">Live Stronger.</span>
+  </h1>
+  <p class="text-slate-400 text-lg md:text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
+    SmartGym gives you AI-personalized workout plans, Indian diet recommendations, real-time progress tracking, and QR-based check-ins — all in one platform.
+  </p>
+  <div class="flex flex-wrap gap-4 justify-center">
+    <a href="{{ url_for('auth.register') }}" class="px-8 py-4 rounded-full neon-btn text-black font-black text-lg shadow-2xl shadow-[#bb00fc]/30 hover:scale-105 transition-transform">
+      Start Your Journey →
+    </a>
+    <a href="#plans" class="px-8 py-4 rounded-full glass text-white font-bold text-lg hover:bg-white/10 transition-all">
+      View Membership Plans
+    </a>
+  </div>
+
+  <!-- Hero Stats -->
+  <div class="mt-20 grid grid-cols-3 gap-8 max-w-lg mx-auto">
+    <div class="text-center">
+      <p class="font-headline text-4xl font-black grad-text">∞</p>
+      <p class="text-slate-500 text-xs mt-1 uppercase tracking-widest">AI Workouts</p>
+    </div>
+    <div class="text-center border-x border-white/10">
+      <p class="font-headline text-4xl font-black grad-text">24×7</p>
+      <p class="text-slate-500 text-xs mt-1 uppercase tracking-widest">Access</p>
+    </div>
+    <div class="text-center">
+      <p class="font-headline text-4xl font-black grad-text">100%</p>
+      <p class="text-slate-500 text-xs mt-1 uppercase tracking-widest">Personalized</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ───────────────────────────────── -->
+<section id="features" class="relative z-10 py-24 px-6 max-w-7xl mx-auto">
+  <div class="text-center mb-16">
+    <h2 class="font-headline text-4xl md:text-5xl font-black tracking-tight mb-4">Everything You Need to <span class="grad-text">Level Up</span></h2>
+    <p class="text-slate-400 max-w-xl mx-auto">From AI workout plans tuned to your goal, to diet tracking and QR attendance — SmartGym does it all.</p>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% set features = [
+      ('fitness_center', '#bb00fc', 'Goal-Based Workouts', 'Get AI-generated exercise plans matched exactly to your goal — weight loss, muscle gain, or maintenance.'),
+      ('restaurant', '#00eefc', 'Indian Diet Planner', 'Personalized daily meal plans based on your budget (₹100-300/day) and calorie targets.'),
+      ('monitoring', '#ac89ff', 'Progress Tracking', 'Log daily weight, track streaks, and visualize your body transformation over time.'),
+      ('qr_code_scanner', '#bb00fc', 'QR Attendance', 'Scan-in at the gym with your personal QR code. Track every visit automatically.'),
+      ('smart_toy', '#00eefc', 'AI Coach', 'Chat with your personal AI fitness coach anytime for advice on form, diet, and recovery.'),
+      ('emoji_events', '#ac89ff', 'Leaderboard', 'Stay motivated by competing with other members on workout streaks and attendance points.'),
+    ] %}
+    {% for icon, color, title, desc in features %}
+    <div class="feature-card glass rounded-3xl p-8 cursor-default">
+      <div class="w-14 h-14 rounded-2xl mb-6 flex items-center justify-center" style="background: {{ color }}20;">
+        <span class="material-symbols-outlined text-2xl" style="color: {{ color }};">{{ icon }}</span>
+      </div>
+      <h3 class="font-headline text-xl font-bold mb-3">{{ title }}</h3>
+      <p class="text-slate-400 text-sm leading-relaxed">{{ desc }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ── PLANS ──────────────────────────────────── -->
+<section id="plans" class="relative z-10 py-24 px-6 max-w-5xl mx-auto">
+  <div class="text-center mb-16">
+    <h2 class="font-headline text-4xl md:text-5xl font-black tracking-tight mb-4">Simple, <span class="grad-text">Transparent</span> Pricing</h2>
+    <p class="text-slate-400">No hidden fees. Cancel anytime.</p>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {% for plan in plans %}
+    {% set is_popular = loop.index == 2 %}
+    <div class="plan-card glass rounded-[2rem] p-8 flex flex-col relative {% if is_popular %}border border-[#00eefc]/40{% endif %}">
+      {% if is_popular %}
+      <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#00eefc] text-black text-[10px] font-black uppercase tracking-widest px-4 py-1 rounded-full">Most Popular</div>
+      {% endif %}
+      <h3 class="font-headline text-2xl font-bold mb-2">{{ plan.name }}</h3>
+      <div class="mb-6">
+        <span class="font-headline text-4xl font-black">₹{{ plan.price }}</span>
+        <span class="text-slate-500 text-sm"> / {{ plan.duration_days }} days</span>
+      </div>
+      <ul class="space-y-3 mb-8 flex-1">
+        {% for feature in plan.features.split(',') %}
+        <li class="flex items-center gap-2 text-sm text-slate-300">
+          <span class="material-symbols-outlined text-[#00eefc] text-base" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+          {{ feature.strip() }}
+        </li>
+        {% endfor %}
+      </ul>
+      <a href="{{ url_for('auth.register') }}" class="block text-center py-4 rounded-2xl font-bold text-sm transition-all
+        {% if is_popular %}neon-btn text-black{% else %}border border-white/20 text-white hover:bg-white/10{% endif %}">
+        Get Started
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ── ABOUT ──────────────────────────────────── -->
+<section id="about" class="relative z-10 py-24 px-6 max-w-5xl mx-auto">
+  <div class="glass rounded-[2.5rem] p-12 flex flex-col md:flex-row items-center gap-12">
+    <div class="flex-1">
+      <h2 class="font-headline text-4xl font-black tracking-tight mb-6">Built for <span class="grad-text">Real People</span>, Real Goals.</h2>
+      <p class="text-slate-400 leading-relaxed mb-6">
+        SmartGym was designed with the Indian fitness journey in mind — affordable, goal-driven, and built on real nutritional science. Whether you're trying to lose weight with budget ₹150/day meals or gain muscle with the right exercise split, our AI has you covered.
+      </p>
+      <p class="text-slate-400 leading-relaxed">
+        Every exercise recommendation, meal plan, and progress milestone is backed by research and continuously improved by our AI engine.
+      </p>
+    </div>
+    <div class="md:w-64 grid grid-cols-2 gap-4">
+      {% for stat, label in [('500+', 'Members'), ('14+', 'Exercises'), ('3', 'AI Plans'), ('24/7', 'Support')] %}
+      <div class="glass rounded-2xl p-6 text-center">
+        <p class="font-headline text-2xl font-black grad-text">{{ stat }}</p>
+        <p class="text-slate-500 text-xs mt-1">{{ label }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ─────────────────────────────────── -->
+<section id="contact" class="relative z-10 py-24 px-6 max-w-3xl mx-auto text-center">
+  <h2 class="font-headline text-4xl font-black tracking-tight mb-6">Get In <span class="grad-text">Touch</span></h2>
+  <p class="text-slate-400 mb-10">Visit us at the gym or reach out through any of our channels.</p>
+  <div class="glass rounded-3xl p-10 text-left space-y-6 mb-8">
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl bg-[#bb00fc]/20 flex items-center justify-center shrink-0">
+        <span class="material-symbols-outlined text-[#bb00fc]">location_on</span>
+      </div>
+      <div>
+        <p class="font-bold">Address</p>
+        <p class="text-slate-400 text-sm">123 Fitness Street, Sector 12, New Delhi — 110001</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl bg-[#00eefc]/20 flex items-center justify-center shrink-0">
+        <span class="material-symbols-outlined text-[#00eefc]">phone</span>
+      </div>
+      <div>
+        <p class="font-bold">Phone</p>
+        <p class="text-slate-400 text-sm">+91 98765 43210</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl bg-[#ac89ff]/20 flex items-center justify-center shrink-0">
+        <span class="material-symbols-outlined text-[#ac89ff]">mail</span>
+      </div>
+      <div>
+        <p class="font-bold">Email</p>
+        <p class="text-slate-400 text-sm">hello@smartgym.ai</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 rounded-xl bg-[#bb00fc]/20 flex items-center justify-center shrink-0">
+        <span class="material-symbols-outlined text-[#bb00fc]">schedule</span>
+      </div>
+      <div>
+        <p class="font-bold">Hours</p>
+        <p class="text-slate-400 text-sm">Mon–Sat: 5:00 AM – 10:00 PM &nbsp;|&nbsp; Sun: 7:00 AM – 6:00 PM</p>
+      </div>
+    </div>
+  </div>
+  <!-- Social Links -->
+  <div class="flex justify-center gap-4">
+    {% for icon, label, href in [('chat', 'WhatsApp', '#'), ('share', 'Instagram', '#'), ('public', 'Website', '#')] %}
+    <a href="{{ href }}" class="w-12 h-12 glass rounded-full flex items-center justify-center hover:bg-white/10 transition-all" title="{{ label }}">
+      <span class="material-symbols-outlined text-slate-400">{{ icon }}</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- ── FOOTER CTA ──────────────────────────────── -->
+<footer class="relative z-10 border-t border-white/5 py-12 px-6 text-center">
+  <p class="font-headline text-2xl font-black grad-text mb-4">SmartGym</p>
+  <p class="text-slate-500 text-sm mb-6">AI-Powered Fitness | Your Goal. Our Plan.</p>
+  <a href="{{ url_for('auth.register') }}" class="inline-block px-8 py-3 rounded-full neon-btn text-black font-black text-sm hover:opacity-90 transition-all">
+    Join SmartGym — Free
+  </a>
+  <p class="text-slate-600 text-xs mt-6">© 2025 SmartGym. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

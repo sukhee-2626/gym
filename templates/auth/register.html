@@ -1,99 +1,299 @@
-{% extends "base.html" %}
-{% block title %}Register{% endblock %}
-{% block content %}
-<div style="min-height:100vh; display:flex; align-items:center; justify-content:center; padding:40px 20px;">
-  <div style="width:100%; max-width:560px;">
-    <div class="text-center mb-24 fade-up">
-      <div style="display:inline-flex; align-items:center; gap:12px; margin-bottom:8px;">
-        <div class="logo-icon" style="width:56px;height:56px;font-size:28px;">🏋️</div>
-        <span class="logo-text" style="font-size:28px;">SmartGym</span>
-      </div>
-      <p class="text-muted text-sm">Join the AI-powered fitness revolution</p>
-    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up | SmartGym</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;900&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Manrope', sans-serif; background: #080b11; color: #ecedf6; min-height: 100vh; }
+    .font-headline { font-family: 'Space Grotesk', sans-serif; }
+    .grad-text { background: linear-gradient(135deg, #bb00fc, #00eefc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .glass { background: rgba(22, 26, 35, 0.7); backdrop-filter: blur(24px); border: 1px solid rgba(255,255,255,0.08); }
+    input, select {
+      width: 100%; background: rgba(11,14,20,0.8); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px; padding: 12px 16px; color: #ecedf6; font-size: 14px;
+      font-family: 'Manrope', sans-serif; outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none; appearance: none;
+    }
+    input:focus, select:focus { border-color: rgba(187,0,252,0.6); box-shadow: 0 0 0 3px rgba(187,0,252,0.1); }
+    input::placeholder { color: #5a5d65; }
+    select option { background: #161a23; }
+    label { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #a9abb3; margin-bottom: 6px; }
+    .step-panel { display: none; }
+    .step-panel.active { display: block; }
+    @keyframes slideIn { from { opacity:0; transform: translateX(24px); } to { opacity:1; transform: translateX(0); } }
+    .step-panel.active { animation: slideIn 0.3s ease forwards; }
+    .goal-card { cursor: pointer; border: 2px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 16px; transition: all 0.2s; }
+    .goal-card:hover { border-color: rgba(187,0,252,0.4); background: rgba(187,0,252,0.05); }
+    .goal-card input[type=radio]:checked ~ * { color: #df8eff; }
+    .goal-card.selected { border-color: #bb00fc; background: rgba(187,0,252,0.1); box-shadow: 0 0 16px rgba(187,0,252,0.15); }
+    .level-card { cursor: pointer; border: 2px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 14px 16px; transition: all 0.2s; }
+    .level-card:hover { border-color: rgba(0,238,252,0.4); }
+    .level-card.selected { border-color: #00eefc; background: rgba(0,238,252,0.08); }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .progress-bar { height: 4px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #bb00fc, #00eefc); border-radius: 4px; transition: width 0.4s ease; }
+    .flash-error { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; padding: 12px 16px; border-radius: 12px; font-size: 13px; font-weight: 600; margin-bottom: 16px; }
+    .orb1 { position:fixed;top:-10%;right:-5%;width:400px;height:400px;background:radial-gradient(circle,rgba(187,0,252,0.1),transparent);border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0; }
+    .orb2 { position:fixed;bottom:-10%;left:-5%;width:350px;height:350px;background:radial-gradient(circle,rgba(0,238,252,0.07),transparent);border-radius:50%;filter:blur(70px);pointer-events:none;z-index:0; }
+  </style>
+</head>
+<body>
+<div class="orb1"></div>
+<div class="orb2"></div>
 
-    <div class="card fade-up" style="animation-delay:0.1s; padding:36px;">
-      <h1 class="text-xl fw-800 mb-8">Create your account 🚀</h1>
-      <p class="text-muted text-sm mb-24">Fill in your details to get a personalized AI fitness plan</p>
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=True) %}
+{% if messages %}
+<div style="position:fixed;top:16px;right:16px;z-index:999;min-width:280px;">
+  {% for cat, msg in messages %}
+  <div class="{{ 'flash-success' if cat == 'success' else 'flash-error' }}">{{ msg }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
 
-      <form method="POST">
-        <div class="grid grid-2" style="gap:16px;">
-          <div class="form-group">
-            <label class="form-label">Full Name</label>
-            <input type="text" name="name" class="form-control" placeholder="Raj Kumar" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Phone</label>
-            <input type="tel" name="phone" class="form-control" placeholder="+91 9999999999">
-          </div>
+<div class="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-12">
+
+  <!-- Header -->
+  <div class="w-full max-w-lg mb-8">
+    <div class="flex items-center justify-between">
+      <a href="{{ url_for('landing.index') }}" class="flex items-center gap-1.5 text-sm text-slate-400 hover:text-white transition-colors">
+        <span class="material-symbols-outlined text-base">arrow_back</span> Back
+      </a>
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg,#bb00fc,#00eefc);">
+          <span class="material-symbols-outlined text-black text-base" style="font-variation-settings:'FILL' 1;">fitness_center</span>
         </div>
-
-        <div class="form-group">
-          <label class="form-label">Email Address</label>
-          <input type="email" name="email" class="form-control" placeholder="you@example.com" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Password</label>
-          <input type="password" name="password" class="form-control" placeholder="Minimum 6 characters" required>
-        </div>
-
-        <div class="grid grid-2" style="gap:16px;">
-          <div class="form-group">
-            <label class="form-label">Gender</label>
-            <select name="gender" class="form-control">
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Age</label>
-            <input type="number" name="age" class="form-control" placeholder="25" min="10" max="80">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Weight (kg)</label>
-            <input type="number" name="weight" class="form-control" placeholder="70" step="0.1">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Height (cm)</label>
-            <input type="number" name="height" class="form-control" placeholder="175" step="0.1">
-          </div>
-        </div>
-
-        <div class="grid grid-2" style="gap:16px;">
-          <div class="form-group">
-            <label class="form-label">Fitness Goal</label>
-            <select name="goal" class="form-control">
-              <option value="lose_weight">🔥 Lose Weight</option>
-              <option value="gain_muscle">💪 Gain Muscle</option>
-              <option value="maintain">⚖️ Maintain</option>
-              <option value="endurance">🏃 Endurance</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Fitness Level</label>
-            <select name="level" class="form-control">
-              <option value="beginner">🌱 Beginner</option>
-              <option value="intermediate">⚡ Intermediate</option>
-              <option value="advanced">🔥 Advanced</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Daily Food Budget (₹)</label>
-          <input type="number" name="budget" class="form-control" placeholder="150" value="150" step="10">
-        </div>
-
-        <button type="submit" class="btn btn-primary w-full" style="justify-content:center; padding:14px; margin-top:8px;">
-          Create Account & Get AI Plan →
-        </button>
-      </form>
-
-      <div style="text-align:center; margin-top:20px;">
-        <span class="text-muted text-sm">Already have an account? </span>
-        <a href="{{ url_for('auth.login') }}" style="color:var(--purple-light); font-weight:600; font-size:13px; text-decoration:none;">Sign in →</a>
+        <span class="font-headline font-black text-lg grad-text">SmartGym</span>
       </div>
     </div>
   </div>
+
+  <!-- Card -->
+  <div class="glass rounded-3xl p-8 w-full max-w-lg">
+
+    <!-- Step indicators -->
+    <div class="flex items-center gap-2 mb-2">
+      {% for i in range(1,4) %}
+      <div id="step-dot-{{ i }}" class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-black transition-all"
+        style="background: {% if i == 1 %}linear-gradient(135deg,#bb00fc,#00eefc); color:#000{% else %}rgba(255,255,255,0.08); color:#5a5d65{% endif %};">{{ i }}</div>
+      {% if i < 3 %}<div id="step-line-{{ i }}" class="flex-1 h-0.5 rounded-full transition-all" style="background: rgba(255,255,255,0.08);"></div>{% endif %}
+      {% endfor %}
+    </div>
+    <div class="progress-bar mb-6">
+      <div class="progress-fill" id="progress-bar" style="width:33%;"></div>
+    </div>
+
+    <form id="register-form" method="POST" action="{{ url_for('auth.register') }}">
+
+      <!-- ══ STEP 1: Account Info ══ -->
+      <div class="step-panel active" id="step-1">
+        <h2 class="font-headline text-2xl font-black mb-1">Create Account 🚀</h2>
+        <p class="text-slate-400 text-sm mb-6">Let's start with your basic info</p>
+
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label>Full Name</label>
+              <input type="text" name="name" id="f_name" placeholder="Raj Kumar" required/>
+            </div>
+            <div>
+              <label>Phone</label>
+              <input type="tel" name="phone" placeholder="+91 9876543210"/>
+            </div>
+          </div>
+          <div>
+            <label>Email Address</label>
+            <input type="email" name="email" id="f_email" placeholder="raj@example.com" required/>
+          </div>
+          <div>
+            <label>Password</label>
+            <div style="position:relative;">
+              <input type="password" name="password" id="f_pass" placeholder="Min. 6 characters" required style="padding-right:44px;"/>
+              <button type="button" onclick="toggleReg()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:#5a5d65;cursor:pointer;">
+                <span class="material-symbols-outlined" id="eye2" style="font-size:18px;">visibility</span>
+              </button>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-3">
+            <div>
+              <label>Gender</label>
+              <select name="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label>Age</label>
+              <input type="number" name="age" placeholder="25" min="10" max="80"/>
+            </div>
+            <div>
+              <label>Budget (₹/day)</label>
+              <input type="number" name="budget" value="150" placeholder="150" step="10"/>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label>Weight (kg)</label>
+              <input type="number" name="weight" placeholder="70" step="0.1"/>
+            </div>
+            <div>
+              <label>Height (cm)</label>
+              <input type="number" name="height" placeholder="175" step="0.1"/>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" onclick="goStep(2)" class="w-full mt-6 py-4 rounded-2xl font-headline font-black text-black text-sm" style="background: linear-gradient(135deg, #bb00fc, #00eefc);">
+          Continue → Choose Your Goal
+        </button>
+      </div>
+
+      <!-- ══ STEP 2: Fitness Goal ══ -->
+      <div class="step-panel" id="step-2">
+        <h2 class="font-headline text-2xl font-black mb-1">What's Your Goal? 🎯</h2>
+        <p class="text-slate-400 text-sm mb-6">AI will tailor your workout plan to this</p>
+
+        <input type="hidden" name="goal" id="goal-input" value="lose_weight"/>
+        <div class="grid grid-cols-2 gap-3 mb-6">
+          {% for val, emoji, title, desc in [
+            ('lose_weight','🔥','Lose Weight','Burn fat with cardio & HIIT'),
+            ('gain_muscle','💪','Gain Muscle','Build strength with heavy lifts'),
+            ('maintain','⚖️','Maintain','Stay fit and balanced'),
+            ('endurance','🏃','Endurance','Improve stamina & cardio'),
+          ] %}
+          <div class="goal-card {% if loop.first %}selected{% endif %}" onclick="selectGoal('{{ val }}', this)">
+            <div class="text-2xl mb-2">{{ emoji }}</div>
+            <p class="font-bold text-sm">{{ title }}</p>
+            <p class="text-xs text-slate-400 mt-0.5">{{ desc }}</p>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="flex gap-3">
+          <button type="button" onclick="goStep(1)" class="flex-1 py-4 rounded-2xl font-bold text-sm border border-white/10 hover:bg-white/5 transition-all">← Back</button>
+          <button type="button" onclick="goStep(3)" class="flex-1 py-4 rounded-2xl font-headline font-black text-black text-sm" style="background: linear-gradient(135deg, #bb00fc, #00eefc);">Continue →</button>
+        </div>
+      </div>
+
+      <!-- ══ STEP 3: Fitness Level ══ -->
+      <div class="step-panel" id="step-3">
+        <h2 class="font-headline text-2xl font-black mb-1">Your Fitness Level 📊</h2>
+        <p class="text-slate-400 text-sm mb-6">This helps us set the right intensity for you</p>
+
+        <input type="hidden" name="level" id="level-input" value="beginner"/>
+        <div class="space-y-3 mb-6">
+          {% for val, emoji, title, desc in [
+            ('beginner','🌱','Beginner','Just starting out, new to workouts'),
+            ('intermediate','⚡','Intermediate','Working out for 6+ months'),
+            ('advanced','🔥','Advanced','Training seriously for 2+ years'),
+          ] %}
+          <div class="level-card flex items-center gap-4 {% if loop.first %}selected{% endif %}" onclick="selectLevel('{{ val }}', this)">
+            <div class="text-3xl">{{ emoji }}</div>
+            <div>
+              <p class="font-bold">{{ title }}</p>
+              <p class="text-xs text-slate-400">{{ desc }}</p>
+            </div>
+            <div class="ml-auto w-5 h-5 rounded-full border-2 border-current flex items-center justify-center level-radio {% if loop.first %}opacity-100 border-[#00eefc]{% else %}opacity-30 border-slate-500{% endif %}">
+              <div class="w-2.5 h-2.5 rounded-full {% if loop.first %}bg-[#00eefc]{% else %}bg-transparent{% endif %} level-dot"></div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <div class="flex gap-3">
+          <button type="button" onclick="goStep(2)" class="flex-1 py-4 rounded-2xl font-bold text-sm border border-white/10 hover:bg-white/5 transition-all">← Back</button>
+          <button type="submit" class="flex-1 py-4 rounded-2xl font-headline font-black text-black text-sm" style="background: linear-gradient(135deg, #bb00fc, #00eefc);">
+            🚀 Create Account
+          </button>
+        </div>
+      </div>
+
+    </form>
+
+    <p class="text-center text-sm text-slate-400 mt-5">
+      Already have an account?
+      <a href="{{ url_for('auth.login') }}" class="font-bold text-[#bb00fc] hover:text-[#df8eff] transition-colors ml-1">Sign in →</a>
+    </p>
+  </div>
 </div>
-{% endblock %}
+
+<script>
+  let currentStep = 1;
+
+  function goStep(n) {
+    // Validate step 1 before leaving
+    if (currentStep === 1 && n === 2) {
+      const name = document.getElementById('f_name').value.trim();
+      const email = document.getElementById('f_email').value.trim();
+      const pass = document.getElementById('f_pass').value.trim();
+      if (!name || !email || !pass) { alert('Please fill in Name, Email and Password.'); return; }
+      if (pass.length < 6) { alert('Password must be at least 6 characters.'); return; }
+    }
+    document.getElementById('step-' + currentStep).classList.remove('active');
+    currentStep = n;
+    document.getElementById('step-' + n).classList.add('active');
+
+    // Update dots & progress
+    for (let i = 1; i <= 3; i++) {
+      const dot = document.getElementById('step-dot-' + i);
+      if (i < n) {
+        dot.style.background = '#00eefc'; dot.style.color = '#000';
+        dot.innerHTML = '<span class="material-symbols-outlined" style="font-size:14px;font-variation-settings:\'FILL\' 1;">check</span>';
+      } else if (i === n) {
+        dot.style.background = 'linear-gradient(135deg,#bb00fc,#00eefc)'; dot.style.color = '#000'; dot.textContent = i;
+      } else {
+        dot.style.background = 'rgba(255,255,255,0.08)'; dot.style.color = '#5a5d65'; dot.textContent = i;
+      }
+    }
+    for (let i = 1; i <= 2; i++) {
+      const line = document.getElementById('step-line-' + i);
+      line.style.background = i < n ? 'linear-gradient(90deg,#bb00fc,#00eefc)' : 'rgba(255,255,255,0.08)';
+    }
+    const pcts = {1: '33%', 2: '66%', 3: '100%'};
+    document.getElementById('progress-bar').style.width = pcts[n];
+  }
+
+  function selectGoal(val, el) {
+    document.getElementById('goal-input').value = val;
+    document.querySelectorAll('.goal-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+
+  function selectLevel(val, el) {
+    document.getElementById('level-input').value = val;
+    document.querySelectorAll('.level-card').forEach(c => {
+      c.classList.remove('selected');
+      c.querySelector('.level-radio').classList.remove('border-[\\#00eefc]');
+      c.querySelector('.level-radio').classList.add('border-slate-500');
+      c.querySelector('.level-dot').classList.remove('bg-[\\#00eefc]');
+      c.querySelector('.level-dot').classList.add('bg-transparent');
+      c.querySelector('.level-radio').style.opacity = '0.3';
+    });
+    el.classList.add('selected');
+    const radio = el.querySelector('.level-radio');
+    const dot = el.querySelector('.level-dot');
+    radio.style.borderColor = '#00eefc'; radio.style.opacity = '1';
+    dot.style.background = '#00eefc';
+  }
+
+  function toggleReg() {
+    const p = document.getElementById('f_pass');
+    const i = document.getElementById('eye2');
+    p.type = p.type === 'password' ? 'text' : 'password';
+    i.textContent = p.type === 'password' ? 'visibility' : 'visibility_off';
+  }
+
+  setTimeout(() => {
+    const f = document.querySelector('[style*="position:fixed"]');
+    if (f) f.style.display = 'none';
+  }, 4000);
+</script>
+</body>
+</html>

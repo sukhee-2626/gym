@@ -1,0 +1,55 @@
+{% extends "admin/base.html" %}
+{% block title %}Attendance{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-8 flex-wrap gap-4">
+  <div>
+    <h1 class="font-headline text-3xl font-black">Gym <span style="background: linear-gradient(135deg,#bb00fc,#00eefc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Attendance</span></h1>
+    <p class="text-slate-400 mt-1">{{ today_count }} check-ins today</p>
+  </div>
+  <form method="GET" class="flex items-center gap-2">
+    <input type="date" name="date" value="{{ filter_date }}"
+      class="bg-[#1c2028] border border-white/10 rounded-xl px-4 py-2 text-white text-sm outline-none focus:ring-2 focus:ring-[#bb00fc]/50"/>
+    <button type="submit" class="px-4 py-2 rounded-xl bg-[#bb00fc] text-black font-bold text-sm">Filter</button>
+  </form>
+</div>
+
+<div class="glass rounded-2xl overflow-hidden">
+  <table class="w-full text-left text-sm">
+    <thead class="bg-white/5 border-b border-white/10">
+      <tr>
+        {% for col in ['Member', 'Check In', 'Check Out', 'Duration', 'Method'] %}
+        <th class="px-5 py-4 text-xs font-bold uppercase tracking-widest text-slate-400">{{ col }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-white/5">
+      {% for r in records %}
+      <tr class="hover:bg-white/5 transition-all">
+        <td class="px-5 py-4">
+          <a href="{{ url_for('admin.member_detail', user_id=r.user_id) }}" class="flex items-center gap-3 hover:text-[#00eefc] transition-colors">
+            <div class="w-8 h-8 rounded-lg bg-[#00eefc]/20 flex items-center justify-center font-bold text-xs">{{ r.user.name[0].upper() }}</div>
+            <span class="font-bold">{{ r.user.name }}</span>
+          </a>
+        </td>
+        <td class="px-5 py-4 text-slate-400">{{ r.check_in.strftime('%H:%M') }}</td>
+        <td class="px-5 py-4 text-slate-400">{{ r.check_out.strftime('%H:%M') if r.check_out else '—' }}</td>
+        <td class="px-5 py-4">
+          {% if r.duration_mins %}
+          <span class="text-[#00eefc] font-bold">{{ r.duration_mins }}m</span>
+          {% else %}—{% endif %}
+        </td>
+        <td class="px-5 py-4">
+          <span class="px-2 py-0.5 rounded-full text-xs font-bold uppercase
+            {% if r.method == 'qr' %}bg-[#bb00fc]/20 text-[#df8eff]{% else %}bg-[#00eefc]/20 text-[#00eefc]{% endif %}">
+            {{ r.method }}
+          </span>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" class="px-5 py-8 text-center text-slate-400">No attendance records for this date.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

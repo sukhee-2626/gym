@@ -3,52 +3,165 @@
 
 {% block content %}
 <header class="mb-10 mt-4">
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div>
-            <h1 class="font-headline text-4xl font-bold tracking-tight text-on-surface">Data <span class="bg-clip-text text-transparent bg-gradient-to-r from-[#bb00fc] to-[#d878ff]">Tracker</span></h1>
-            <p class="text-[#a9abb3] mt-2">Log your daily weight to let the AI calibrate your diet and workout plans.</p>
-        </div>
-    </div>
+  <h1 class="font-headline text-4xl font-bold tracking-tight">Data <span class="bg-clip-text text-transparent bg-gradient-to-r from-[#bb00fc] to-[#00eefc]">Tracker</span></h1>
+  <p class="text-[#a9abb3] mt-2">Log your daily weight to let AI calibrate your diet and workout plans.</p>
 </header>
 
+<!-- Stats Row -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+  {% for icon, color, val, label in [
+    ('monitor_weight', '#bb00fc', (current_user.weight_kg|string + ' kg') if current_user.weight_kg else '—', 'Current Weight'),
+    ('straighten', '#00eefc', (current_user.bmi|string) if current_user.bmi else '—', 'BMI'),
+    ('local_fire_department', '#ac89ff', cal_burned|string + ' kcal', 'Burned Today'),
+    ('restaurant', '#00eefc', cal_intake|string + ' kcal', 'Consumed Today'),
+  ] %}
+  <div class="glass-panel rounded-2xl p-5 flex items-center gap-4" style="background: rgba(34,38,47,0.4);">
+    <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0" style="background: {{ color }}18;">
+      <span class="material-symbols-outlined" style="color: {{ color }};">{{ icon }}</span>
+    </div>
+    <div>
+      <p class="font-headline font-black text-xl">{{ val }}</p>
+      <p class="text-[10px] text-[#a9abb3] uppercase tracking-widest">{{ label }}</p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-    <div class="glass-panel p-8 rounded-[2.5rem]" style="background: rgba(34, 38, 47, 0.4);">
-        <div class="flex items-center gap-3 mb-8">
-            <span class="material-symbols-outlined text-[#bb00fc]">scale</span>
-            <h2 class="font-headline text-xl font-bold tracking-tight">Log Bodyweight</h2>
-        </div>
-        <form action="{{ url_for('tracker.log_weight') }}" method="POST" class="space-y-6">
-            <div class="group relative">
-                <label class="block text-[10px] uppercase tracking-[0.2em] text-[#a9abb3] font-bold mb-2 ml-1">Current Weight (kg)</label>
-                <div class="flex items-center gap-4">
-                    <input name="weight_kg" class="flex-1 bg-[#10131a] border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#bb00fc]/50 outline-none text-2xl font-headline font-bold" type="number" step="0.1" required/>
-                    <button type="submit" class="p-4 rounded-2xl bg-gradient-to-r from-[#d878ff] to-[#bb00fc] text-black hover:scale-105 active:scale-95 transition-all outline-none">
-                        <span class="material-symbols-outlined font-bold">add</span>
-                    </button>
-                </div>
-            </div>
-        </form>
+
+  <!-- Log Form -->
+  <div class="glass-panel p-8 rounded-[2.5rem]" style="background: rgba(34, 38, 47, 0.4);">
+    <div class="flex items-center gap-3 mb-8">
+      <div class="w-10 h-10 rounded-xl bg-[#bb00fc]/20 flex items-center justify-center">
+        <span class="material-symbols-outlined text-[#bb00fc]">scale</span>
+      </div>
+      <h2 class="font-headline text-xl font-bold tracking-tight">Log Bodyweight</h2>
     </div>
 
-    <div class="glass-panel p-8 rounded-[2.5rem]" style="background: rgba(34, 38, 47, 0.4);">
-        <h3 class="text-xl font-bold font-headline mb-6">Recent Measurements</h3>
-        <div class="space-y-4">
-            {% for log in weight_logs|reverse %}
-            <div class="p-4 rounded-2xl bg-white/5 border border-white/5 flex justify-between items-center group hover:border-[#00eefc]/50 transition-all">
-                <div class="flex items-center gap-4">
-                    <div class="w-10 h-10 rounded-full bg-[#006970]/30 flex items-center justify-center text-[#00eefc]">
-                        <span class="material-symbols-outlined">trending_flat</span>
-                    </div>
-                    <div>
-                        <p class="font-bold font-headline text-xl">{{ log.weight_kg }} <span class="text-xs text-[#a9abb3] tracking-widest font-body uppercase">kg</span></p>
-                        <p class="text-[10px] text-[#a9abb3]">{{ log.logged_date.strftime('%B %d, %Y') }}</p>
-                    </div>
-                </div>
-            </div>
-            {% else %}
-            <p class="text-sm text-[#a9abb3]">No weight logs yet.</p>
-            {% endfor %}
+    <form action="{{ url_for('tracker.log_weight') }}" method="POST" class="space-y-5">
+      <div>
+        <label class="block text-[10px] uppercase tracking-[0.2em] text-[#a9abb3] font-bold mb-2 ml-1">Current Weight (kg)</label>
+        <div class="flex items-center gap-3">
+          <input name="weight_kg" class="flex-1 bg-[#10131a] border border-white/10 rounded-2xl px-6 py-4 text-white focus:ring-2 focus:ring-[#bb00fc]/50 outline-none text-2xl font-headline font-bold transition-all"
+            type="number" step="0.1" min="20" max="300" placeholder="{{ current_user.weight_kg or '70' }}" required/>
+          <button type="submit" class="p-4 rounded-2xl text-black hover:scale-105 active:scale-95 transition-all outline-none"
+            style="background: linear-gradient(135deg, #bb00fc, #00eefc);">
+            <span class="material-symbols-outlined font-bold">add</span>
+          </button>
         </div>
+      </div>
+      <div>
+        <label class="block text-[10px] uppercase tracking-[0.2em] text-[#a9abb3] font-bold mb-2 ml-1">Notes (optional)</label>
+        <input name="notes" type="text" placeholder="e.g. After morning run..." class="w-full bg-[#10131a] border border-white/10 rounded-2xl px-5 py-3 text-white text-sm focus:ring-2 focus:ring-[#bb00fc]/50 outline-none transition-all"/>
+      </div>
+      <button type="submit" class="w-full py-4 rounded-2xl font-headline font-black text-black text-sm transition-all hover:opacity-90"
+        style="background: linear-gradient(135deg, #bb00fc, #00eefc);">
+        💾 Save Weight Log
+      </button>
+    </form>
+
+    {% if current_user.bmi %}
+    <div class="mt-6 pt-6 border-t border-white/10">
+      <p class="text-xs text-[#a9abb3] uppercase tracking-widest mb-3">BMI Status</p>
+      {% set bmi = current_user.bmi %}
+      {% if bmi < 18.5 %}{% set bmi_label, bmi_color = 'Underweight', '#00eefc' %}
+      {% elif bmi < 25 %}{% set bmi_label, bmi_color = 'Healthy ✅', '#22c55e' %}
+      {% elif bmi < 30 %}{% set bmi_label, bmi_color = 'Overweight', '#f59e0b' %}
+      {% else %}{% set bmi_label, bmi_color = 'Obese', '#ef4444' %}{% endif %}
+      <div class="flex items-center gap-4">
+        <p class="font-headline text-3xl font-black" style="color: {{ bmi_color }};">{{ bmi }}</p>
+        <div>
+          <p class="font-bold text-sm" style="color: {{ bmi_color }};">{{ bmi_label }}</p>
+          <p class="text-xs text-[#a9abb3]">Based on {{ current_user.weight_kg }} kg / {{ current_user.height_cm }} cm</p>
+        </div>
+      </div>
+      <!-- BMI Bar -->
+      <div class="mt-3 h-2 bg-white/10 rounded-full overflow-hidden">
+        <div class="h-full rounded-full transition-all" style="width: {{ [((bmi - 15) / 25 * 100)|int, 100]|min }}%; background: {{ bmi_color }};"></div>
+      </div>
+      <div class="flex justify-between text-[9px] text-[#a9abb3] mt-1">
+        <span>15</span><span>18.5</span><span>25</span><span>30</span><span>40</span>
+      </div>
     </div>
+    {% endif %}
+  </div>
+
+  <!-- Recent Logs + Chart -->
+  <div class="space-y-6">
+    <!-- Weight Chart -->
+    {% if weight_logs %}
+    <div class="glass-panel p-6 rounded-[2.5rem]" style="background: rgba(34,38,47,0.4);">
+      <h3 class="font-headline font-bold text-lg mb-4">Weight Trend</h3>
+      <canvas id="weightChart" height="140"></canvas>
+    </div>
+    {% endif %}
+
+    <!-- Logs List -->
+    <div class="glass-panel p-6 rounded-[2.5rem]" style="background: rgba(34, 38, 47, 0.4);">
+      <h3 class="font-headline text-lg font-bold mb-5">Recent Measurements</h3>
+      <div class="space-y-3">
+        {% for log in weight_logs %}
+        <div class="p-4 rounded-2xl bg-white/5 border border-white/5 flex justify-between items-center hover:border-[#00eefc]/30 transition-all">
+          <div class="flex items-center gap-4">
+            <div class="w-10 h-10 rounded-full bg-[#006970]/30 flex items-center justify-center text-[#00eefc]">
+              <span class="material-symbols-outlined text-sm">
+                {% if loop.index > 1 and weight_logs[loop.index0 - 1].weight_kg > log.weight_kg %}trending_down
+                {% elif loop.index > 1 and weight_logs[loop.index0 - 1].weight_kg < log.weight_kg %}trending_up
+                {% else %}trending_flat{% endif %}
+              </span>
+            </div>
+            <div>
+              <p class="font-headline font-black text-xl">{{ log.weight_kg }} <span class="text-xs text-[#a9abb3] uppercase tracking-widest font-body">kg</span></p>
+              <p class="text-[10px] text-[#a9abb3]">{{ log.logged_date.strftime('%B %d, %Y') }}</p>
+            </div>
+          </div>
+          {% if log.notes %}
+          <p class="text-xs text-[#a9abb3] italic max-w-[120px] text-right truncate">{{ log.notes }}</p>
+          {% endif %}
+        </div>
+        {% else %}
+        <div class="text-center py-8">
+          <span class="material-symbols-outlined text-4xl text-[#a9abb3] mb-3 block">scale</span>
+          <p class="text-sm text-[#a9abb3]">No weight logs yet. Log your first entry!</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+{% if weight_logs %}
+<script>
+  const ctx = document.getElementById('weightChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: {{ weight_logs | map(attribute='logged_date') | list | tojson }}.map(d => {
+        const dt = new Date(d); return dt.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+      }).reverse(),
+      datasets: [{
+        label: 'Weight (kg)',
+        data: [{% for log in weight_logs|reverse %}{{ log.weight_kg }}{% if not loop.last %},{% endif %}{% endfor %}],
+        borderColor: '#bb00fc',
+        backgroundColor: 'rgba(187,0,252,0.1)',
+        borderWidth: 2.5,
+        pointBackgroundColor: '#bb00fc',
+        pointRadius: 4,
+        tension: 0.4,
+        fill: true,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#a9abb3', font: { size: 10 } } },
+        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#a9abb3', font: { size: 10 } } }
+      }
+    }
+  });
+</script>
+{% endif %}
 {% endblock %}

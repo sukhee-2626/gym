@@ -19,13 +19,28 @@ def create_app():
 
     # Config
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'smartgym-secret-2024')
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///smartgym.db')
+
+    # Database — supports SQLite (local) and PostgreSQL (cloud)
+    db_url = os.getenv('DATABASE_URL', 'sqlite:///smartgym.db')
+    # Fix: SQLAlchemy 2.x requires "postgresql://" not "postgres://"
+    if db_url.startswith('postgres://'):
+        db_url = db_url.replace('postgres://', 'postgresql://', 1)
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_url
+
+    # Connection pool settings (important for cloud PostgreSQL)
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+        'pool_pre_ping': True,       # test connection before using
+        'pool_recycle': 300,         # recycle connections every 5 min
+        'connect_args': {'sslmode': 'require'} if 'postgresql' in db_url else {},
+    }
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     CORS(app)
     db.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
+    login_manager.login_message = 'Please log in to access SmartGym.'
+    login_manager.login_message_category = 'error'
 
     # Register blueprints
     from app.routes.auth import auth_bp
@@ -37,9 +52,12 @@ def create_app():
     from app.routes.tracker import tracker_bp
     from app.routes.chatbot import chatbot_bp
     from app.routes.leaderboard import leaderboard_bp
+    from app.routes.admin import admin_bp
+    from app.routes.landing import landing_bp
 
+    app.register_blueprint(landing_bp, url_prefix='/')
     app.register_blueprint(auth_bp, url_prefix='/auth')
-    app.register_blueprint(dashboard_bp, url_prefix='/')
+    app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
     app.register_blueprint(workout_bp, url_prefix='/workout')
     app.register_blueprint(diet_bp, url_prefix='/diet')
     app.register_blueprint(attendance_bp, url_prefix='/attendance')
@@ -47,5 +65,6 @@ def create_app():
     app.register_blueprint(tracker_bp, url_prefix='/tracker')
     app.register_blueprint(chatbot_bp, url_prefix='/chatbot')
     app.register_blueprint(leaderboard_bp, url_prefix='/leaderboard')
+    app.register_blueprint(admin_bp, url_prefix='/admin')
 
     return app

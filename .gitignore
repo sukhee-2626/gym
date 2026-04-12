@@ -1,6 +1,11 @@
 venv/
 __pycache__/
+*.pyc
 *.db
-.env
 instance/
 .vscode/
+.env
+*.egg-info/
+dist/
+build/
+.DS_Store

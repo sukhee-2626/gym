@@ -1,0 +1,86 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ member.name }}{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+  <a href="{{ url_for('admin.members') }}" class="text-sm text-slate-400 hover:text-white flex items-center gap-1 mb-4">
+    <span class="material-symbols-outlined text-sm">arrow_back</span> Back to Members
+  </a>
+  <div class="glass rounded-2xl p-8 flex flex-col md:flex-row items-start gap-8">
+    <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-[#bb00fc]/50 to-[#00eefc]/50 flex items-center justify-center font-headline font-black text-4xl">{{ member.name[0].upper() }}</div>
+    <div class="flex-1">
+      <h1 class="font-headline text-3xl font-black mb-2">{{ member.name }}</h1>
+      <p class="text-slate-400 mb-4">{{ member.email }} {% if member.phone %}· {{ member.phone }}{% endif %}</p>
+      <div class="flex flex-wrap gap-3">
+        <span class="px-3 py-1 rounded-full bg-[#bb00fc]/20 text-[#df8eff] text-xs font-bold uppercase">{{ member.goal | replace('_', ' ') if member.goal else 'No goal' }}</span>
+        <span class="px-3 py-1 rounded-full bg-[#00eefc]/20 text-[#00eefc] text-xs font-bold uppercase">{{ member.fitness_level or 'Not set' }}</span>
+        <span class="px-3 py-1 rounded-full {% if member.is_active %}bg-emerald-500/20 text-emerald-400{% else %}bg-red-500/20 text-red-400{% endif %} text-xs font-bold">
+           {{ 'Active' if member.is_active else 'Inactive' }}
+        </span>
+      </div>
+    </div>
+    <div class="grid grid-cols-2 gap-3 text-sm text-slate-400">
+      <div><p class="text-xs uppercase tracking-widest mb-1 text-slate-500">Age</p><p class="font-bold text-white">{{ member.age or '—' }}</p></div>
+      <div><p class="text-xs uppercase tracking-widest mb-1 text-slate-500">BMI</p><p class="font-bold text-white">{{ member.bmi or '—' }}</p></div>
+      <div><p class="text-xs uppercase tracking-widest mb-1 text-slate-500">Weight</p><p class="font-bold text-white">{{ member.weight_kg or '—' }} kg</p></div>
+      <div><p class="text-xs uppercase tracking-widest mb-1 text-slate-500">Height</p><p class="font-bold text-white">{{ member.height_cm or '—' }} cm</p></div>
+      {% if streak %}
+      <div><p class="text-xs uppercase tracking-widest mb-1 text-slate-500">Streak</p><p class="font-bold text-white">🔥 {{ streak.workout_streak }}</p></div>
+      <div><p class="text-xs uppercase tracking-widest mb-1 text-slate-500">Points</p><p class="font-bold text-white">{{ streak.total_points }}</p></div>
+      {% endif %}
+    </div>
+    <form action="{{ url_for('admin.toggle_member_status', user_id=member.id) }}" method="POST">
+      <button type="submit" class="px-4 py-2 rounded-xl border text-sm font-bold transition-all
+        {% if member.is_active %}border-red-500/50 text-red-400 hover:bg-red-500/10{% else %}border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10{% endif %}">
+        {{ 'Deactivate' if member.is_active else 'Activate' }}
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Memberships -->
+<div class="glass rounded-2xl p-6 mb-6">
+  <h3 class="font-headline font-bold text-lg mb-4">Membership History</h3>
+  <table class="w-full text-left text-sm">
+    <thead><tr class="border-b border-white/10">
+      <th class="pb-3 text-xs uppercase text-slate-400 tracking-widest">Plan</th>
+      <th class="pb-3 text-xs uppercase text-slate-400 tracking-widest">Start</th>
+      <th class="pb-3 text-xs uppercase text-slate-400 tracking-widest">End</th>
+      <th class="pb-3 text-xs uppercase text-slate-400 tracking-widest">Amount</th>
+      <th class="pb-3 text-xs uppercase text-slate-400 tracking-widest">Status</th>
+    </tr></thead>
+    <tbody class="divide-y divide-white/5">
+      {% for mem in memberships %}
+      <tr>
+        <td class="py-3 font-bold">{{ mem.plan.name }}</td>
+        <td class="py-3 text-slate-400">{{ mem.start_date.strftime('%d %b %Y') }}</td>
+        <td class="py-3 text-slate-400">{{ mem.end_date.strftime('%d %b %Y') }}</td>
+        <td class="py-3 font-bold text-[#00eefc]">₹{{ mem.amount_paid | int }}</td>
+        <td class="py-3">
+          <span class="px-2 py-0.5 rounded-full text-xs font-bold {% if mem.status == 'active' %}bg-emerald-500/20 text-emerald-400{% else %}bg-slate-500/20 text-slate-400{% endif %}">
+            {{ mem.status | capitalize }}
+          </span>
+        </td>
+      </tr>
+      {% else %}<tr><td colspan="5" class="py-4 text-slate-400">No membership history.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<!-- Attendance -->
+<div class="glass rounded-2xl p-6">
+  <h3 class="font-headline font-bold text-lg mb-4">Recent Attendance (Last 30)</h3>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+    {% for att in attendance %}
+    <div class="p-3 rounded-xl bg-white/5 border border-white/5">
+      <p class="font-bold text-sm">{{ att.check_in.strftime('%d %b %Y') }}</p>
+      <p class="text-xs text-slate-400">In: {{ att.check_in.strftime('%H:%M') }}
+        {% if att.check_out %} · Out: {{ att.check_out.strftime('%H:%M') }}{% endif %}
+      </p>
+    </div>
+    {% else %}<p class="text-slate-400 text-sm col-span-4">No attendance records.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

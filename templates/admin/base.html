@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}Admin{% endblock %} | SmartGym Admin</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700;900&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    body { font-family: 'Manrope', sans-serif; background: #0b0e14; color: #ecedf6; }
+    .font-headline { font-family: 'Space Grotesk', sans-serif; }
+    .glass { background: rgba(22, 26, 33, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.07); }
+    .nav-active { background: rgba(187,0,252,0.1); border-left: 3px solid #bb00fc; color: #df8eff; }
+    .nav-link { border-left: 3px solid transparent; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+  </style>
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="min-h-screen">
+
+<!-- Flash Messages -->
+{% with messages = get_flashed_messages(with_categories=True) %}
+{% if messages %}
+<div class="fixed top-4 right-4 z-50 space-y-2" id="flash-wrap">
+  {% for cat, msg in messages %}
+  <div class="px-5 py-3 rounded-xl text-sm font-bold border backdrop-blur-md
+    {% if cat == 'success' %}bg-emerald-500/20 border-emerald-500 text-emerald-300
+    {% else %}bg-red-500/20 border-red-500 text-red-300{% endif %}">{{ msg }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+<div class="flex min-h-screen">
+  <!-- Sidebar -->
+  <aside class="w-64 shrink-0 glass border-r border-white/5 flex flex-col py-8 px-4 fixed h-full z-40">
+    <div class="flex items-center gap-3 px-4 mb-10">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#bb00fc] to-[#00eefc] flex items-center justify-center">
+        <span class="material-symbols-outlined text-black" style="font-variation-settings:'FILL' 1">admin_panel_settings</span>
+      </div>
+      <div>
+        <p class="font-headline font-black text-lg">Admin</p>
+        <p class="text-[10px] text-[#00eefc] uppercase tracking-widest">SmartGym</p>
+      </div>
+    </div>
+    <nav class="flex-1 space-y-1 text-sm">
+      {% set links = [
+        ('admin.index', 'dashboard', 'Overview'),
+        ('admin.members', 'group', 'Members'),
+        ('admin.fees', 'payments', 'Fees & Revenue'),
+        ('admin.attendance', 'how_to_reg', 'Attendance'),
+        ('admin.exercises', 'fitness_center', 'Exercises'),
+      ] %}
+      {% for endpoint, icon, label in links %}
+      <a href="{{ url_for(endpoint) }}" class="nav-link flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all
+        {% if request.endpoint == endpoint %}nav-active{% else %}text-slate-400 hover:text-white hover:bg-white/5{% endif %}">
+        <span class="material-symbols-outlined text-lg">{{ icon }}</span>
+        {{ label }}
+      </a>
+      {% endfor %}
+    </nav>
+    <div class="space-y-1 text-sm border-t border-white/5 pt-4 mt-4">
+      <a href="{{ url_for('dashboard.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-white/5 transition-all">
+        <span class="material-symbols-outlined text-lg">open_in_new</span> Member View
+      </a>
+      <a href="{{ url_for('auth.logout') }}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 hover:bg-red-500/10 transition-all">
+        <span class="material-symbols-outlined text-lg">logout</span> Logout
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main class="ml-64 flex-1 p-8 max-w-full">
+    {% block content %}{% endblock %}
+  </main>
+</div>
+
+<script>
+  setTimeout(() => { const f = document.getElementById('flash-wrap'); if (f) f.remove(); }, 4000);
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

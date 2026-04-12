@@ -1,0 +1,62 @@
+{% extends "admin/base.html" %}
+{% block title %}Exercises{% endblock %}
+
+{% block content %}
+<div class="flex justify-between items-center mb-8 flex-wrap gap-4">
+  <div>
+    <h1 class="font-headline text-3xl font-black">Exercise <span style="background: linear-gradient(135deg,#bb00fc,#00eefc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Library</span></h1>
+    <p class="text-slate-400 mt-1">{{ exercises|length }} exercises — goal-customized with YouTube videos</p>
+  </div>
+  <div class="flex gap-3">
+    <form method="GET" class="flex gap-2">
+      <select name="goal" class="bg-[#1c2028] border border-white/10 rounded-xl px-4 py-2 text-white text-sm outline-none">
+        <option value="">All Goals</option>
+        {% for g in ['weight_loss', 'gain_muscle', 'maintain', 'all'] %}
+        <option value="{{ g }}" {% if goal_filter == g %}selected{% endif %}>{{ g | replace('_', ' ') | title }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit" class="px-4 py-2 bg-[#1c2028] border border-white/10 rounded-xl text-sm text-white">Filter</button>
+    </form>
+    <a href="{{ url_for('admin.add_exercise') }}" class="px-5 py-2 rounded-xl font-bold text-sm text-black flex items-center gap-2" style="background: linear-gradient(135deg,#bb00fc,#00eefc);">
+      <span class="material-symbols-outlined text-base">add</span> Add Exercise
+    </a>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+  {% for ex in exercises %}
+  <div class="glass rounded-2xl p-5 flex flex-col gap-3 group">
+    <div class="flex justify-between items-start">
+      <div class="flex-1">
+        <span class="text-[10px] font-bold uppercase tracking-widest text-[#bb00fc]">{{ ex.goal_tag | replace('_', ' ') }}</span>
+        <h3 class="font-headline font-bold text-lg mt-0.5">{{ ex.name }}</h3>
+        <p class="text-xs text-slate-400 mt-1">{{ ex.muscle_group | title }} · {{ ex.equipment | title }} · {{ ex.difficulty | title }}</p>
+      </div>
+      <span class="px-2 py-0.5 rounded-full text-xs font-bold {% if ex.is_active %}bg-emerald-500/20 text-emerald-400{% else %}bg-red-500/20 text-red-400{% endif %} shrink-0">
+        {{ 'On' if ex.is_active else 'Off' }}
+      </span>
+    </div>
+    <p class="text-xs text-slate-400 leading-relaxed line-clamp-2">{{ ex.description or 'No description.' }}</p>
+    <div class="flex gap-3 text-xs text-slate-400">
+      <span>{{ ex.sets_recommended }} sets</span>
+      <span>× {{ ex.reps_recommended }} reps</span>
+      <span>{{ ex.rest_seconds }}s rest</span>
+      <span>~{{ ex.calories_per_min }} kcal/min</span>
+    </div>
+    {% if ex.youtube_url %}
+    <a href="{{ ex.youtube_url }}" target="_blank" class="flex items-center gap-2 text-xs text-red-400 hover:text-red-300 transition-colors">
+      <span class="material-symbols-outlined text-sm">play_circle</span> Watch Tutorial
+    </a>
+    {% endif %}
+    <div class="flex gap-2 mt-auto pt-3 border-t border-white/5">
+      <a href="{{ url_for('admin.edit_exercise', ex_id=ex.id) }}" class="flex-1 text-center py-2 rounded-xl bg-white/5 hover:bg-white/10 text-sm font-bold transition-all">Edit</a>
+      <form action="{{ url_for('admin.delete_exercise', ex_id=ex.id) }}" method="POST" onsubmit="return confirm('Delete \'{{ ex.name }}\'?')">
+        <button type="submit" class="px-4 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-400 text-sm font-bold transition-all">Delete</button>
+      </form>
+    </div>
+  </div>
+  {% else %}
+  <p class="text-slate-400 text-sm col-span-3">No exercises found. <a href="{{ url_for('admin.add_exercise') }}" class="text-[#bb00fc] hover:underline">Add one →</a></p>
+  {% endfor %}
+</div>
+{% endblock %}

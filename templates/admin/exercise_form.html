@@ -1,0 +1,114 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ 'Add Exercise' if not exercise else 'Edit Exercise' }}{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+  <div class="mb-6">
+    <a href="{{ url_for('admin.exercises') }}" class="text-sm text-slate-400 hover:text-white flex items-center gap-1">
+      <span class="material-symbols-outlined text-sm">arrow_back</span> Back to Exercises
+    </a>
+  </div>
+  <h1 class="font-headline text-3xl font-black mb-8">
+    {{ 'Add New' if not exercise else 'Edit' }} <span style="background: linear-gradient(135deg,#bb00fc,#00eefc); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Exercise</span>
+  </h1>
+
+  <form method="POST" class="glass rounded-2xl p-8 space-y-5">
+    <!-- Name -->
+    <div>
+      <label class="block text-xs uppercase tracking-widest text-slate-400 mb-2">Exercise Name *</label>
+      <input name="name" required value="{{ exercise.name if exercise else '' }}"
+        class="w-full bg-[#0b0e14] border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-[#bb00fc]/50 transition-all"/>
+    </div>
+
+    <!-- Goal Tag -->
+    <div>
+      <label class="block text-xs uppercase tracking-widest text-slate-400 mb-2">Goal Tag *</label>
+      <select name="goal_tag" class="w-full bg-[#0b0e14] border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-[#bb00fc]/50">
+        {% for goal in ['weight_loss', 'gain_muscle', 'maintain', 'all'] %}
+        <option value="{{ goal }}" {% if exercise and exercise.goal_tag == goal %}selected{% endif %}>{{ goal | replace('_', ' ') | title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Muscle + Equipment row -->
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs uppercase tracking-widest text-slate-400 mb-2">Muscle Group</label>
+        <select name="muscle_group" class="w-full bg-[#0b0e14] border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-[#bb00fc]/50">
+          {% for mg in ['cardio', 'chest', 'back', 'legs', 'shoulders', 'arms', 'core', 'full body'] %}
+          <option value="{{ mg }}" {% if exercise and exercise.muscle_group == mg %}selected{% endif %}>{{ mg | title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs uppercase tracking-widest text-slate-400 mb-2">Equipment</label>
+        <select name="equipment" class="w-full bg-[#0b0e14] border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-[#bb00fc]/50">
+          {% for eq in ['bodyweight', 'dumbbell', 'barbell', 'machine', 'resistance band'] %}
+          <option value="{{ eq }}" {% if exercise and exercise.equipment == eq %}selected{% endif %}>{{ eq | title }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <!-- Difficulty -->
+    <div>
+      <label class="block text-xs uppercase tracking-widest text-slate-400 mb-2">Difficulty</label>
+      <div class="flex gap-3">
+        {% for lvl in ['beginner', 'intermediate', 'advanced'] %}
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="radio" name="difficulty" value="{{ lvl }}" class="accent-[#bb00fc]"
+            {% if (exercise and exercise.difficulty == lvl) or (not exercise and lvl == 'beginner') %}checked{% endif %}/>
+          <span class="text-sm capitalize">{{ lvl }}</span>
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Sets / Reps / Rest / Calories -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div>
+        <label class="block text-xs uppercase tracking-widest text-slate-400 mb-2">Sets</label>
+        <input type="number" name="sets_recommended" value="{{ exercise.sets_recommended if exercise else 3 }}" min="1"
+          class="w-full bg-[#0b0e14] border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-[#bb00fc]/50"/>
+      </div>
+      <div>
+        <label class="block text-xs uppercase tracking-widest text-slate-400 mb-2">Reps / Duration</label>
+        <input type="text" name="reps_recommended" value="{{ exercise.reps_recommended if exercise else '12' }}"
+          placeholder="e.g. 12 or 30s"
+          class="w-full bg-[#0b0e14] border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-[#bb00fc]/50"/>
+      </div>
+      <div>
+        <label class="block text-xs uppercase tracking-widest text-slate-400 mb-2">Rest (seconds)</label>
+        <input type="number" name="rest_seconds" value="{{ exercise.rest_seconds if exercise else 60 }}" min="0"
+          class="w-full bg-[#0b0e14] border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-[#bb00fc]/50"/>
+      </div>
+      <div>
+        <label class="block text-xs uppercase tracking-widest text-slate-400 mb-2">Kcal/min</label>
+        <input type="number" name="calories_per_min" value="{{ exercise.calories_per_min if exercise else 5 }}" step="0.5"
+          class="w-full bg-[#0b0e14] border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-[#bb00fc]/50"/>
+      </div>
+    </div>
+
+    <!-- YouTube URL -->
+    <div>
+      <label class="block text-xs uppercase tracking-widest text-slate-400 mb-2">YouTube Video URL</label>
+      <input type="url" name="youtube_url" value="{{ exercise.youtube_url if exercise else '' }}"
+        placeholder="https://www.youtube.com/watch?v=..."
+        class="w-full bg-[#0b0e14] border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-[#bb00fc]/50"/>
+    </div>
+
+    <!-- Description -->
+    <div>
+      <label class="block text-xs uppercase tracking-widest text-slate-400 mb-2">Description</label>
+      <textarea name="description" rows="3"
+        class="w-full bg-[#0b0e14] border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-[#bb00fc]/50 resize-none"
+        placeholder="Brief description of the exercise and its benefits...">{{ exercise.description if exercise else '' }}</textarea>
+    </div>
+
+    <button type="submit" class="w-full py-4 rounded-xl font-black text-black text-sm transition-all hover:opacity-90"
+      style="background: linear-gradient(135deg, #bb00fc, #00eefc);">
+      {{ 'Save Changes' if exercise else 'Add Exercise' }}
+    </button>
+  </form>
+</div>
+{% endblock %}
