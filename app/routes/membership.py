@@ -25,13 +25,10 @@ def index():
     )
 
 
-@membership_bp.route('/enroll', methods=['POST'])
+@membership_bp.route('/enroll/<int:plan_id>', methods=['POST'])
 @login_required
-def enroll():
-    data = request.get_json()
-    plan = MembershipPlan.query.get(data.get('plan_id'))
-    if not plan:
-        return jsonify({"success": False, "message": "Plan not found"})
+def enroll(plan_id):
+    plan = MembershipPlan.query.get_or_404(plan_id)
 
     # Expire existing active membership
     existing = Membership.query.filter_by(
@@ -48,7 +45,7 @@ def enroll():
         start_date=start,
         end_date=end,
         amount_paid=plan.price,
-        payment_mode=data.get('payment_mode', 'cash'),
+        payment_mode=request.form.get('payment_mode', 'cash'),
         status='active',
     )
     db.session.add(m)
@@ -63,7 +60,8 @@ def enroll():
     db.session.add(notif)
     db.session.commit()
 
-    return jsonify({"success": True, "ends": end.strftime('%d %b %Y'), "plan": plan.name})
+    flash(f'✅ Successfully enrolled in the {plan.name} plan!', 'success')
+    return redirect(url_for('membership.index'))
 
 
 @membership_bp.route('/api/plans')

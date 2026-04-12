@@ -179,9 +179,13 @@
       <span class="material-symbols-outlined" {% if 'diet' in request.endpoint %}style="font-variation-settings: 'FILL' 1;"{% endif %}>restaurant</span>
       <span class="font-['Manrope'] text-[10px] uppercase tracking-widest mt-1">Diet</span>
     </a>
-    <a href="{{ url_for('chatbot.index') }}" class="flex flex-col items-center justify-center {% if 'chatbot' in request.endpoint %}bg-gradient-to-b from-fuchsia-500/20 to-cyan-500/20 text-white rounded-2xl ring-1 ring-white/20{% else %}text-slate-500{% endif %} px-4 py-2 transition-all">
-      <span class="material-symbols-outlined" {% if 'chatbot' in request.endpoint %}style="font-variation-settings: 'FILL' 1;"{% endif %}>smart_toy</span>
-      <span class="font-['Manrope'] text-[10px] uppercase tracking-widest mt-1">Coach</span>
+    <a href="{{ url_for('chatbot.index') }}" class="flex flex-col items-center justify-center {% if 'chatbot' in request.endpoint %}bg-gradient-to-b from-fuchsia-500/20 to-cyan-500/20 text-white rounded-2xl ring-1 ring-white/20{% else %}text-slate-500{% endif %} px-3 py-2 transition-all">
+      <span class="material-symbols-outlined text-[20px]" {% if 'chatbot' in request.endpoint %}style="font-variation-settings: 'FILL' 1;"{% endif %}>smart_toy</span>
+      <span class="font-['Manrope'] text-[9px] uppercase tracking-widest mt-1">Coach</span>
+    </a>
+    <a href="{{ url_for('membership.index') }}" class="flex flex-col items-center justify-center {% if 'membership' in request.endpoint %}bg-gradient-to-b from-fuchsia-500/20 to-cyan-500/20 text-white rounded-2xl ring-1 ring-white/20{% else %}text-slate-500{% endif %} px-3 py-2 transition-all">
+      <span class="material-symbols-outlined text-[20px]" {% if 'membership' in request.endpoint %}style="font-variation-settings: 'FILL' 1;"{% endif %}>stars</span>
+      <span class="font-['Manrope'] text-[9px] uppercase tracking-widest mt-1">Plans</span>
     </a>
   </nav>
 
