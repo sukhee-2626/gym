@@ -266,7 +266,7 @@ def generate_diet_plan(goal, tdee, budget_inr=150, is_veg=True):
     cal_key = list(MEAL_PLANS[goal_key].keys())[0]
     plan = MEAL_PLANS[goal_key][cal_key]
 
-    result = {}
+    meals_list = []
     total_cals = 0
     total_protein = 0
     total_cost = 0
@@ -295,28 +295,30 @@ def generate_diet_plan(goal, tdee, budget_inr=150, is_veg=True):
                 meal_cals += fd["cal"]
                 meal_protein += fd["protein"]
                 meal_cost += fd["cost"]
+        meals_list.append({
+            "type": meal_type,
+            "name": meal["note"],
+            "description": " · ".join([i["name"] for i in items_detail]),
+            "calories": round(meal_cals),
+            "protein": f"{round(meal_protein, 1)}g",
+        })
 
-        result[meal_type] = {
-            "items": items_detail,
-            "note": meal["note"],
-            "total_calories": round(meal_cals),
-            "total_protein": round(meal_protein, 1),
-            "total_cost": round(meal_cost),
-        }
         total_cals += meal_cals
         total_protein += meal_protein
         total_cost += meal_cost
 
     return {
-        "plan": result,
-        "daily_summary": {
-            "total_calories": round(total_cals),
-            "total_protein": round(total_protein, 1),
-            "total_cost": round(total_cost),
-            "target_calories": tdee,
-            "budget_inr": budget_inr,
-            "within_budget": total_cost <= budget_inr,
-        }
+        "budget": {
+            "spent": round(total_cost),
+            "target": budget_inr
+        },
+        "macros": {
+            "calories": tdee,
+            "protein": f"{round(tdee * 0.3 / 4)}g",  # 30% protein
+            "carbs": f"{round(tdee * 0.4 / 4)}g",    # 40% carbs
+            "fats": f"{round(tdee * 0.3 / 9)}g"      # 30% fats
+        },
+        "meals": meals_list
     }
 
 
