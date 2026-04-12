@@ -36,7 +36,10 @@ WORKOUT_TEMPLATES = {
                 {"name": "Jump Squats", "sets": 3, "reps": "15", "rest": 30, "cal_per_min": 8, "muscle": "legs"},
                 {"name": "Burpees", "sets": 3, "reps": "10", "rest": 30, "cal_per_min": 10, "muscle": "cardio"},
             ]},
-            {"day": "Sunday",    "focus": "Active Recovery", "exercises": []},
+            {"day": "Sunday",    "focus": "Active Recovery", "exercises": [
+                {"name": "Light Stretching", "sets": 3, "reps": "5 min", "rest": 0, "cal_per_min": 3, "muscle": "full body"},
+                {"name": "Brisk Walk", "sets": 1, "reps": "30 min", "rest": 0, "cal_per_min": 5, "muscle": "cardio"}
+            ]},
         ],
         "intermediate": [
             {"day": "Monday",    "focus": "Chest + Cardio", "exercises": [
@@ -69,7 +72,10 @@ WORKOUT_TEMPLATES = {
                 {"name": "Box Jumps", "sets": 4, "reps": "10", "rest": 45, "cal_per_min": 9, "muscle": "legs"},
                 {"name": "Battle Ropes", "sets": 4, "reps": "30s", "rest": 30, "cal_per_min": 11, "muscle": "cardio"},
             ]},
-            {"day": "Sunday",    "focus": "Rest", "exercises": []},
+            {"day": "Sunday",    "focus": "Active Recovery", "exercises": [
+                {"name": "Light Stretching", "sets": 3, "reps": "5 min", "rest": 0, "cal_per_min": 3, "muscle": "full body"},
+                {"name": "Brisk Walk", "sets": 1, "reps": "30 min", "rest": 0, "cal_per_min": 5, "muscle": "cardio"}
+            ]},
         ],
     },
     "gain_muscle": {
@@ -103,7 +109,10 @@ WORKOUT_TEMPLATES = {
                 {"name": "Pull-ups", "sets": 4, "reps": "8", "rest": 60, "cal_per_min": 5, "muscle": "back"},
                 {"name": "Seated Cable Row", "sets": 3, "reps": "12", "rest": 60, "cal_per_min": 4, "muscle": "back"},
             ]},
-            {"day": "Sunday",    "focus": "Active Recovery", "exercises": []},
+            {"day": "Sunday",    "focus": "Active Recovery", "exercises": [
+                {"name": "Light Stretching", "sets": 3, "reps": "5 min", "rest": 0, "cal_per_min": 3, "muscle": "full body"},
+                {"name": "Brisk Walk", "sets": 1, "reps": "30 min", "rest": 0, "cal_per_min": 5, "muscle": "cardio"}
+            ]},
         ],
     },
     "maintain": {
@@ -128,7 +137,9 @@ WORKOUT_TEMPLATES = {
             {"day": "Saturday",  "focus": "Light Cardio", "exercises": [
                 {"name": "Cycling or Swimming", "sets": 1, "reps": "40 min", "rest": 0, "cal_per_min": 7, "muscle": "cardio"},
             ]},
-            {"day": "Sunday",    "focus": "Rest", "exercises": []},
+            {"day": "Sunday",    "focus": "Rest", "exercises": [
+                {"name": "Light Stretching", "sets": 3, "reps": "5 min", "rest": 0, "cal_per_min": 3, "muscle": "full body"}
+            ]},
         ],
     },
 }
