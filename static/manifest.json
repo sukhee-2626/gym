@@ -1,0 +1,22 @@
+{
+    "name": "SmartGym AI",
+    "short_name": "SmartGym",
+    "description": "The Synthetic Pulse - AI-Powered Fitness, Diet, and Gym Management ecosystem.",
+    "start_url": "/dashboard",
+    "display": "standalone",
+    "background_color": "#0b0e14",
+    "theme_color": "#0b0e14",
+    "orientation": "portrait-primary",
+    "icons": [
+        {
+            "src": "https://ui-avatars.com/api/?name=Gym&background=df8eff&color=fff&size=192",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "https://ui-avatars.com/api/?name=Gym&background=df8eff&color=fff&size=512",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ]
+}
