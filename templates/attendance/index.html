@@ -36,10 +36,12 @@
                 <p class="mt-4 text-[#a9abb3] text-sm">Checked out at {{ today_attendance.check_out.strftime('%H:%M') }}</p>
             {% endif %}
         {% else %}
-            <!-- Demo manual checkin button -->
-            <form action="{{ url_for('attendance.scan_qr', token='demo_token') }}" method="GET" class="mt-4 w-full max-w-xs">
-                <button type="submit" class="w-full py-4 rounded-2xl bg-gradient-to-r from-[#bb00fc] to-[#00eefc] text-black font-bold shadow-xl">
-                    Manual Check In (Demo)
+            <form action="{{ url_for('attendance.checkin') }}" method="POST" class="mt-4 w-full max-w-xs">
+                <button type="submit" class="w-full py-4 rounded-2xl text-black font-headline font-black shadow-xl hover:opacity-90 transition-all" style="background: linear-gradient(135deg, #bb00fc, #00eefc);">
+                    <span class="flex items-center justify-center gap-2">
+                        <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1;">how_to_reg</span>
+                        Check In Now
+                    </span>
                 </button>
             </form>
         {% endif %}

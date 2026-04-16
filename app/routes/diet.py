@@ -39,11 +39,18 @@ def index():
 @diet_bp.route('/log', methods=['POST'])
 @login_required
 def log_food():
-    data = request.get_json()
-    food_name = data.get('food_name')
-    meal_type = data.get('meal_type', 'snack')
+    # Accept both form POST and JSON
+    if request.is_json:
+        data = request.get_json()
+        food_name = data.get('food_name')
+        meal_type = data.get('meal_type', 'snack')
+        use_json = True
+    else:
+        food_name = request.form.get('food_name')
+        meal_type = request.form.get('meal_type', 'snack')
+        use_json = False
 
-    if food_name in INDIAN_FOOD_DB:
+    if food_name and food_name in INDIAN_FOOD_DB:
         fd = INDIAN_FOOD_DB[food_name]
         entry = FoodEntry(
             user_id=current_user.id,
@@ -59,7 +66,6 @@ def log_food():
         )
         db.session.add(entry)
 
-        # Update diet streak
         streak = current_user.streaks
         if streak and streak.last_diet_date != date.today():
             streak.last_diet_date = date.today()
@@ -67,12 +73,19 @@ def log_food():
             streak.total_points += 5
 
         db.session.commit()
-        return jsonify({"success": True, "entry": {
-            "food": food_name, "cal": fd['cal'],
-            "protein": fd['protein'], "cost": fd['cost']
-        }})
 
-    return jsonify({"success": False, "message": "Food not found"})
+        if use_json:
+            return jsonify({"success": True, "entry": {
+                "food": food_name, "cal": fd['cal'],
+                "protein": fd['protein'], "cost": fd['cost']
+            }})
+        flash(f'✅ {food_name} logged! ({fd["cal"]} kcal)', 'success')
+        return redirect(url_for('diet.index'))
+
+    if use_json:
+        return jsonify({"success": False, "message": "Food not found"})
+    flash('Food not found. Please select from the list.', 'error')
+    return redirect(url_for('diet.index'))
 
 
 @diet_bp.route('/delete/<int:entry_id>', methods=['DELETE'])

@@ -162,22 +162,23 @@
             <div class="space-y-4">
                 <div>
                     <label class="text-xs font-bold uppercase tracking-widest text-[#a9abb3] mb-2 block">Food Item</label>
-                    <select name="food_id" class="w-full bg-[#10131a] border border-white/10 rounded-2xl p-4 text-white focus:ring-2 focus:ring-primary outline-none">
-                        {% for c, d in food_db.items() %}
-                        <optgroup label="{{ c|capitalize }}">
-                            {% for id, details in d.items() %}
-                            <option value="{{ id }}">{{ details.name }} ({{ details.cals }} kcal)</option>
-                            {% endfor %}
-                        </optgroup>
+                    <select name="food_name" class="w-full bg-[#10131a] border border-white/10 rounded-2xl p-4 text-white focus:ring-2 focus:ring-[#bb00fc]/50 outline-none">
+                        {% for name, info in food_db.items() %}
+                        <option value="{{ name }}">{{ name }} — {{ info.cal }} kcal | ₹{{ info.cost }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div>
-                   <label class="text-xs font-bold uppercase tracking-widest text-[#a9abb3] mb-2 block">Quantity (Grams/ml)</label>
-                   <input type="number" name="quantity" required min="1" value="100" class="w-full bg-[#10131a] border border-white/10 rounded-2xl p-4 text-white transform focus:ring-2 focus:ring-primary outline-none text-center text-xl font-bold font-headline">
+                    <label class="text-xs font-bold uppercase tracking-widest text-[#a9abb3] mb-2 block">Meal Type</label>
+                    <select name="meal_type" class="w-full bg-[#10131a] border border-white/10 rounded-2xl p-4 text-white focus:ring-2 focus:ring-[#bb00fc]/50 outline-none">
+                        <option value="breakfast">🌅 Breakfast</option>
+                        <option value="lunch">☀️ Lunch</option>
+                        <option value="dinner">🌙 Dinner</option>
+                        <option value="snack">🍎 Snack</option>
+                    </select>
                 </div>
-                <div class="pt-4">
-                    <button type="submit" class="w-full py-4 bg-gradient-to-r from-primary-dim to-tertiary-dim rounded-2xl text-white font-bold tracking-widest uppercase hover:opacity-90 font-headline">ADD TO LOG</button>
+                <div class="pt-2">
+                    <button type="submit" class="w-full py-4 rounded-2xl text-black font-headline font-black uppercase tracking-widest hover:opacity-90 transition-all" style="background: linear-gradient(135deg, #bb00fc, #00eefc);">✅ Add to Log</button>
                 </div>
             </div>
         </form>
